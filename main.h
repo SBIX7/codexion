@@ -6,30 +6,52 @@
 /*   By: msbii <msbii@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/28 09:51:30 by msbii             #+#    #+#             */
-/*   Updated: 2026/08/29 10:13:57 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/01 11:30:08 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAIN_H
 # define MAIN_H
 
+# include <pthread.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
 
-typedef struct s_info
+struct t_coder;
+typedef struct s_data
 {
-	int		num_coders;
-	int		time_burnout;
-	int		time_compile;
-	int		time_debug;
-	int		time_refactor;
-	int		num_compiles;
-	int		dongle_cooldown;
-	char	*scheduler;
-}			t_info;
+	int				num_coders;
+	int				time_burnout;
+	int				time_compile;
+	int				time_debug;
+	int				time_refactor;
+	int				num_compiles;
+	int				dongle_cooldown;
+	char			*scheduler;
+	t_coder			*coders;
+	pthread_mutex_t	*dongles;
+	int				*dongles_status;
+	int				*queue;
+	int				queue_size;
+	int				simulation_running;
+	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	queue_mutex;
+	pthread_mutex_t	simulation_mutex;
+}					t_data;
 
-int			is_valid_argument(char *arg, int schedular);
-t_info		*parser(char **args);
+typedef struct s_coder
+{
+	int				coder_id;
+	long			last_compile_time;
+	int				compile_count;
+	pthread_t		thread;
+	t_data			*data;
+}					t_coder;
+
+int					is_valid_argument(char *arg, int schedular);
+t_data				*parser(char **args);
+t_coder				*init_coders(t_data *data);
+int					setup_env(t_data *data, t_coder *coders);
 #endif

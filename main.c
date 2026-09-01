@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/28 09:51:59 by msbii             #+#    #+#             */
-/*   Updated: 2026/08/29 10:11:07 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/01 10:46:05 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,16 @@
 int	main(int argc, char **argv)
 {
 	int		i;
-	t_info	*infos;
+	t_data	*data;
+	t_coder *coders;
 
 	if (argc != 9)
 	{
 		printf("Error: There is eight mandatory options to implicitly define.\n");
 		return (1);
 	}
-	infos = parser(argv);
-	
+	data = parser(argv);
+	coders = init_coders(data);
+	setup_env()
 	return (0);
 }
