@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msbii <msbii@student.42.fr>                +#+  +:+       +#+        */
+/*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/28 09:51:30 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/01 11:30:08 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/01 20:26:19 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <string.h>
 # include <unistd.h>
 
-struct t_coder;
+struct s_coder;
 typedef struct s_data
 {
 	int				num_coders;
@@ -30,7 +30,7 @@ typedef struct s_data
 	int				num_compiles;
 	int				dongle_cooldown;
 	char			*scheduler;
-	t_coder			*coders;
+	struct s_coder	*coders;
 	pthread_mutex_t	*dongles;
 	int				*dongles_status;
 	int				*queue;
@@ -47,6 +47,7 @@ typedef struct s_coder
 	long			last_compile_time;
 	int				compile_count;
 	pthread_t		thread;
+	pthread_cond_t	cond;
 	t_data			*data;
 }					t_coder;
 

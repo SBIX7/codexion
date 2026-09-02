@@ -3,61 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: msbii <msbii@student.42.fr>                +#+  +:+       +#+        */
+/*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 10:09:59 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/01 11:44:16 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/01 20:28:16 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
-
-static int	is_valid_argument(char *arg, int schedular)
-{
-	int	i;
-
-	i = 0;
-	if (schedular)
-	{
-		return ((strcmp(arg, "fifo") || strcmp(arg, "edf")) == 0);
-	}
-	while (arg[i] != '\0')
-	{
-		if (!(arg[i] >= '0' && arg[i] <= '9'))
-			return (0);
-		i++;
-	}
-	if (!(atol(arg) <= 2147483647 && atol(arg) >= -2147483648))
-		return (0);
-	return (1);
-}
-
-t_data	*parser(char **args)
-{
-	int		i;
-	t_data	*data;
-
-	data = malloc(sizeof(t_data));
-	if (data == NULL)
-		return (NULL);
-	if (is_valid_argument(args[1], 0))
-		data->num_coders = atoi(args[1]);
-	if (is_valid_argument(args[2], 0))
-		data->time_burnout = atoi(args[2]);
-	if (is_valid_argument(args[3], 0))
-		data->time_compile = atoi(args[3]);
-	if (is_valid_argument(args[4], 0))
-		data->time_debug = atoi(args[4]);
-	if (is_valid_argument(args[5], 0))
-		data->time_refactor = atoi(args[5]);
-	if (is_valid_argument(args[6], 0))
-		data->num_compiles = atoi(args[6]);
-	if (is_valid_argument(args[7], 0))
-		data->dongle_cooldown = atoi(args[7]);
-	if (is_valid_argument(args[8], 1))
-		data->scheduler = args[8];
-	return (data);
-}
 
 t_coder	*init_coders(t_data *data)
 {
@@ -74,12 +27,14 @@ t_coder	*init_coders(t_data *data)
 		coders[i].compile_count = 0;
 		coders[i].last_compile_time = 0;
 		coders[i].data = data;
+		if (pthread_cond_init(&coders[i].cond, NULL) != 0)
+			return (NULL);
 		i++;
 	}
 	return (coders);
 }
 
-static int	*init_mutexs(t_data *data)
+static int	init_mutexs(t_data *data)
 {
 	int	i;
 	int	j;
@@ -99,28 +54,17 @@ static int	*init_mutexs(t_data *data)
 		}
 		i++;
 	}
-	if (!(pthread_mutex_init(&data->print_mutex, NULL)
-			&& pthread_mutex_init(&data->queue_mutex, NULL)
-			&& pthread_mutex_init(&data->simulation_mutex, NULL)))
+	if (pthread_mutex_init(&data->print_mutex, NULL) != 0
+		|| pthread_mutex_init(&data->queue_mutex, NULL) != 0
+		|| pthread_mutex_init(&data->simulation_mutex, NULL) != 0)
 		return (1);
 	return (0);
 }
 
-int	setup_env(t_data *data, t_coder *coders)
+static void	init_simulation_state(t_data *data)
 {
-	pthread_mutex_t	*dongles;
-	int				*dongles_status;
-	int				*queue;
-	int				i;
+	int	i;
 
-	dongles = malloc(sizeof(pthread_mutex_t) * data->num_coders);
-	dongles_status = malloc(sizeof(int) * data->num_coders);
-	queue = malloc(sizeof(int) * data->num_coders);
-	if (!(queue && dongles && dongles_status))
-		return (1);
-	data->coders = coders;
-	if (init_mutexs(data) != 0)
-		return (1);
 	i = 0;
 	while (i < data->num_coders)
 	{
@@ -130,4 +74,25 @@ int	setup_env(t_data *data, t_coder *coders)
 	}
 	data->queue_size = 0;
 	data->simulation_running = 1;
+}
+
+int	setup_env(t_data *data, t_coder *coders)
+{
+	pthread_mutex_t	*dongles;
+	int				*dongles_status;
+	int				*queue;
+
+	dongles = malloc(sizeof(pthread_mutex_t) * data->num_coders);
+	dongles_status = malloc(sizeof(int) * data->num_coders);
+	queue = malloc(sizeof(int) * data->num_coders);
+	if (!(queue && dongles && dongles_status))
+		return (1);
+	data->coders = coders;
+	data->dongles = dongles;
+	data->dongles_status = dongles_status;
+	data->queue = queue;
+	if (init_mutexs(data) != 0)
+		return (1);
+	init_simulation_state(data);
+	return (0);
 }
