@@ -6,11 +6,19 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 10:09:59 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/01 20:28:16 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/03 22:22:30 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+long	get_current_time(void)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
 
 t_coder	*init_coders(t_data *data)
 {
@@ -83,7 +91,7 @@ int	setup_env(t_data *data, t_coder *coders)
 	int				*queue;
 
 	dongles = malloc(sizeof(pthread_mutex_t) * data->num_coders);
-	dongles_status = malloc(sizeof(int) * data->num_coders);
+	dongles_status = malloc(sizeof(long) * data->num_coders);
 	queue = malloc(sizeof(int) * data->num_coders);
 	if (!(queue && dongles && dongles_status))
 		return (1);
@@ -91,6 +99,8 @@ int	setup_env(t_data *data, t_coder *coders)
 	data->dongles = dongles;
 	data->dongles_status = dongles_status;
 	data->queue = queue;
+	data->request_count = 0;
+	data->start_time = get_current_time();
 	if (init_mutexs(data) != 0)
 		return (1);
 	init_simulation_state(data);
