@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/28 09:51:30 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/03 22:22:43 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 13:53:35 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-struct	s_coder;
+struct s_coder;
 typedef struct s_data
 {
 	int				num_coders;
@@ -60,7 +60,6 @@ int					is_valid_argument(char *arg, int schedular);
 t_data				*parser(char **args);
 t_coder				*init_coders(t_data *data);
 int					setup_env(t_data *data, t_coder *coders);
-t_coder				*pop_heap(t_data *data);
 void				push_heap(t_data *data, t_coder *coder);
 long				get_current_time(void);
 void				*coder_wait_for_turn(t_data *data, t_coder *coder);
@@ -68,4 +67,13 @@ void				coder_compile(t_data *data, t_coder *coder);
 void				coder_rest(t_data *data, t_coder *coder);
 void				coder_release(t_data *data, t_coder *coder);
 void				sync_coder_request(t_data *data, t_coder *coder);
+void				*routine(void *arg);
+void				*monitor_routine(void *arg);
+void				start_simulation(t_data *data);
+int					dongles_free(t_coder *coder, t_data *data);
+long				get_cooldown_remaining(t_data *data, t_coder *coder);
+void				set_timewait(struct timespec *ts, long wait_time);
+void				take_dongles(t_data *data, t_coder *coder);
+int					is_priority(t_data *data, int id_1, int id_2);
+void				extract_from_heap(t_data *data, int coder_id);
 #endif

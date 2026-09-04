@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 19:54:12 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/03 22:21:21 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 12:02:53 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	*coder_wait_for_turn(t_data *data, t_coder *coder)
 	return ((void *)coder);
 }
 
-static void	coder_compile(t_data *data, t_coder *coder)
+void	coder_compile(t_data *data, t_coder *coder)
 {
 	int	idx1;
 	int	idx2;

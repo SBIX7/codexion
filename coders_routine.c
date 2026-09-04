@@ -6,13 +6,13 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 13:36:00 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/03 22:22:18 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 13:53:18 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static int	dongles_free(t_coder *coder, t_data *data)
+int	dongles_free(t_coder *coder, t_data *data)
 {
 	int		dongle_i;
 	int		n_coders;
@@ -54,7 +54,7 @@ long	get_cooldown_remaining(t_data *data, t_coder *coder)
 
 void	take_dongles(t_data *data, t_coder *coder)
 {
-	pop_heap(data);
+	extract_from_heap(data, coder->coder_id);
 	data->dongles_status[coder->coder_id - 1] = -1;
 	data->dongles_status[coder->coder_id % data->num_coders] = -1;
 }

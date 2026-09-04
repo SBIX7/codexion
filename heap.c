@@ -6,13 +6,13 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 15:02:45 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/03 09:40:00 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 13:53:01 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static void	swap(int *queue, int a, int b)
+void	swap(int *queue, int a, int b)
 {
 	int	c;
 
@@ -21,7 +21,7 @@ static void	swap(int *queue, int a, int b)
 	queue[b] = c;
 }
 
-static void	shift_down(t_data *data, int i)
+void	shift_down(t_data *data, int i)
 {
 	int	left;
 	int	right;
@@ -45,8 +45,7 @@ static void	shift_down(t_data *data, int i)
 			break ;
 	}
 }
-
-static int	is_priority(t_data *data, int id_1, int id_2)
+int	is_priority(t_data *data, int id_1, int id_2)
 {
 	t_coder	*coder1;
 	t_coder	*coder2;
@@ -81,13 +80,20 @@ void	push_heap(t_data *data, t_coder *coder)
 	data->queue_size += 1;
 }
 
-t_coder	*pop_heap(t_data *data)
+void	extract_from_heap(t_data *data, int coder_id)
 {
-	int	poped_id;
+	int	i;
 
-	poped_id = data->queue[0];
-	swap(data->queue, 0, data->queue_size - 1);
+	i = 0;
+	while (i < data->queue_size)
+	{
+		if (data->queue[i] == coder_id)
+			break ;
+		i++;
+	}
+	if (data->queue_size == i)
+		return ;
+	data->queue[i] = data->queue[data->queue_size - 1];
 	data->queue_size -= 1;
 	shift_down(data, 0);
-	return (&data->coders[poped_id - 1]);
 }

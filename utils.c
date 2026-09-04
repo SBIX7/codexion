@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 10:09:59 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/03 22:22:30 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 12:03:23 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_coder	*init_coders(t_data *data)
 	return (coders);
 }
 
-static int	init_mutexs(t_data *data)
+int	init_mutexs(t_data *data)
 {
 	int	i;
 	int	j;
@@ -69,7 +69,7 @@ static int	init_mutexs(t_data *data)
 	return (0);
 }
 
-static void	init_simulation_state(t_data *data)
+void	init_simulation_state(t_data *data)
 {
 	int	i;
 
@@ -87,8 +87,9 @@ static void	init_simulation_state(t_data *data)
 int	setup_env(t_data *data, t_coder *coders)
 {
 	pthread_mutex_t	*dongles;
-	int				*dongles_status;
+	long			*dongles_status;
 	int				*queue;
+	int				i;
 
 	dongles = malloc(sizeof(pthread_mutex_t) * data->num_coders);
 	dongles_status = malloc(sizeof(long) * data->num_coders);
@@ -101,6 +102,9 @@ int	setup_env(t_data *data, t_coder *coders)
 	data->queue = queue;
 	data->request_count = 0;
 	data->start_time = get_current_time();
+	i = 0;
+	while (++i <= data->num_coders)
+		data->coders[i - 1].last_compile_time = data->start_time;
 	if (init_mutexs(data) != 0)
 		return (1);
 	init_simulation_state(data);

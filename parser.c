@@ -6,20 +6,20 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/01 14:40:34 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/01 14:47:26 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 12:03:17 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-static int	is_valid_argument(char *arg, int schedular)
+int	is_valid_argument(char *arg, int schedular)
 {
 	int	i;
 
 	i = 0;
 	if (schedular)
 	{
-		return ((strcmp(arg, "fifo") || strcmp(arg, "edf")) == 0);
+		return (strcmp(arg, "fifo") == 0 || strcmp(arg, "edf") == 0);
 	}
 	while (arg[i] != '\0')
 	{
