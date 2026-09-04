@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 13:36:00 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 13:53:18 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 22:10:00 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,33 @@ int	dongles_free(t_coder *coder, t_data *data)
 	return (0);
 }
 
+int	can_take_dongles(t_data *data, t_coder *coder)
+{
+	int	o_id;
+	int	i;
+
+	if (!dongles_free(coder, data))
+		return (0);
+	i = 0;
+	while (i < data->queue_size)
+	{
+		o_id = data->queue[i];
+		if (o_id != coder->coder_id)
+		{
+			if ((o_id - 1 == coder->coder_id % data->num_coders || o_id
+					% data->num_coders == coder->coder_id - 1)
+				&& is_priority(data, o_id, coder->coder_id))
+			{
+				if (data->dongles_status[o_id - 1] != -1
+					&& data->dongles_status[o_id % data->num_coders] != -1)
+					return (0);
+			}
+		}
+		i++;
+	}
+	return (1);
+}
+
 long	get_cooldown_remaining(t_data *data, t_coder *coder)
 {
 	int		idx1;
@@ -50,13 +77,6 @@ long	get_cooldown_remaining(t_data *data, t_coder *coder)
 		if (data->dongles_status[idx2] - current > wait)
 			wait = data->dongles_status[idx2] - current;
 	return (wait);
-}
-
-void	take_dongles(t_data *data, t_coder *coder)
-{
-	extract_from_heap(data, coder->coder_id);
-	data->dongles_status[coder->coder_id - 1] = -1;
-	data->dongles_status[coder->coder_id % data->num_coders] = -1;
 }
 
 void	set_timewait(struct timespec *ts, long wait_time)

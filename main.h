@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/28 09:51:30 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 13:53:35 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 22:34:23 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,8 @@ void				start_simulation(t_data *data);
 int					dongles_free(t_coder *coder, t_data *data);
 long				get_cooldown_remaining(t_data *data, t_coder *coder);
 void				set_timewait(struct timespec *ts, long wait_time);
-void				take_dongles(t_data *data, t_coder *coder);
 int					is_priority(t_data *data, int id_1, int id_2);
 void				extract_from_heap(t_data *data, int coder_id);
+int					can_take_dongles(t_data *data, t_coder *coder);
+void				precise_usleep(long time_in_ms, t_data *data);
 #endif

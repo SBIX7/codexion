@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 19:54:12 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 12:02:53 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 22:41:55 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,19 @@ void	sync_coder_request(t_data *data, t_coder *coder)
 	if (strcmp(data->scheduler, "fifo") == 0)
 		coder->request_order = data->request_count++;
 	push_heap(data, coder);
-	while (data->simulation_running && (data->queue[0] != coder->coder_id
-			|| !dongles_free(coder, data)))
+	while (data->simulation_running && !can_take_dongles(data, coder))
 	{
-		if (data->queue[0] == coder->coder_id)
+		wait_time = get_cooldown_remaining(data, coder);
+		if (wait_time > 0)
 		{
-			wait_time = get_cooldown_remaining(data, coder);
-			if (wait_time > 0)
-			{
-				set_timewait(&ts, wait_time);
-				pthread_cond_timedwait(&coder->cond, &data->simulation_mutex,
-					&ts);
-				continue ;
-			}
+			set_timewait(&ts, wait_time);
+			pthread_cond_timedwait(&coder->cond, &data->simulation_mutex, &ts);
 		}
-		pthread_cond_wait(&coder->cond, &data->simulation_mutex);
+		else
+		{
+			set_timewait(&ts, 5);
+			pthread_cond_timedwait(&coder->cond, &data->simulation_mutex, &ts);
+		}
 	}
 }
 
@@ -47,7 +45,9 @@ void	*coder_wait_for_turn(t_data *data, t_coder *coder)
 		pthread_mutex_unlock(&data->simulation_mutex);
 		return (NULL);
 	}
-	take_dongles(data, coder);
+	extract_from_heap(data, coder->coder_id);
+	data->dongles_status[coder->coder_id - 1] = -1;
+	data->dongles_status[coder->coder_id % data->num_coders] = -1;
 	pthread_mutex_unlock(&data->simulation_mutex);
 	return ((void *)coder);
 }
@@ -73,7 +73,7 @@ void	coder_compile(t_data *data, t_coder *coder)
 	printf("%ld %d is compiling\n", get_current_time() - data->start_time, idx1
 		+ 1);
 	pthread_mutex_unlock(&data->print_mutex);
-	usleep(data->time_compile * 1000);
+	precise_usleep(data->time_compile, data);
 }
 
 void	coder_release(t_data *data, t_coder *coder)
@@ -81,6 +81,7 @@ void	coder_release(t_data *data, t_coder *coder)
 	int		idx1;
 	int		idx2;
 	long	ready;
+	int		i;
 
 	idx1 = coder->coder_id - 1;
 	idx2 = coder->coder_id % data->num_coders;
@@ -90,8 +91,12 @@ void	coder_release(t_data *data, t_coder *coder)
 	ready = get_current_time() + data->dongle_cooldown;
 	data->dongles_status[idx1] = ready;
 	data->dongles_status[idx2] = ready;
-	if (data->queue_size > 0)
-		pthread_cond_signal(&data->coders[data->queue[0] - 1].cond);
+	i = 0;
+	while (i < data->queue_size)
+	{
+		pthread_cond_signal(&data->coders[data->queue[i] - 1].cond);
+		i++;
+	}
 	pthread_mutex_unlock(&data->simulation_mutex);
 }
 
@@ -103,10 +108,10 @@ void	coder_rest(t_data *data, t_coder *coder)
 	pthread_mutex_lock(&data->print_mutex);
 	printf("%ld %d is debugging\n", get_current_time() - data->start_time, id);
 	pthread_mutex_unlock(&data->print_mutex);
-	usleep(data->time_debug * 1000);
+	precise_usleep(data->time_debug, data);
 	pthread_mutex_lock(&data->print_mutex);
 	printf("%ld %d is refactoring\n", get_current_time() - data->start_time,
 		id);
 	pthread_mutex_unlock(&data->print_mutex);
-	usleep(data->time_refactor * 1000);
+	precise_usleep(data->time_refactor, data);
 }

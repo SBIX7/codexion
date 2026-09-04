@@ -6,11 +6,23 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 22:19:32 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 12:03:13 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 22:42:20 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+void	precise_usleep(long time_in_ms, t_data *data)
+{
+	long	start_time;
+
+	start_time = get_current_time();
+	while (get_current_time() - start_time < time_in_ms
+		&& data->simulation_running)
+	{
+		usleep(100);
+	}
+}
 
 void	handle_coder_burnout(t_data *data, int i)
 {

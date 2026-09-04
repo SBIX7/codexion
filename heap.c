@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 15:02:45 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 13:53:01 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/04 22:15:43 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,15 @@ int	is_priority(t_data *data, int id_1, int id_2)
 	coder1 = &data->coders[id_1 - 1];
 	coder2 = &data->coders[id_2 - 1];
 	if (strcmp("edf", data->scheduler) == 0)
+	{
 		if (coder1->last_compile_time < coder2->last_compile_time)
 			return (1);
+		if (coder1->last_compile_time == coder2->last_compile_time)
+		{
+			if (coder1->request_order < coder2->request_order)
+				return (1);
+		}
+	}
 	if (strcmp("fifo", data->scheduler) == 0)
 		if (coder1->request_order < coder2->request_order)
 			return (1);
@@ -95,5 +102,5 @@ void	extract_from_heap(t_data *data, int coder_id)
 		return ;
 	data->queue[i] = data->queue[data->queue_size - 1];
 	data->queue_size -= 1;
-	shift_down(data, 0);
+	shift_down(data, i);
 }
