@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 22:19:32 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 12:21:18 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 21:33:50 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	precise_usleep(long time_in_ms, t_data *data)
 		usleep(100);
 }
 
-void	handle_coder_burnout(t_data *data, int i)
+static void	handle_coder_burnout(t_data *data, int i)
 {
 	pthread_mutex_lock(&data->print_mutex);
 	pthread_mutex_lock(&data->simulation_mutex);
@@ -36,14 +36,14 @@ void	handle_coder_burnout(t_data *data, int i)
 	pthread_mutex_unlock(&data->coders[i].state_mutex);
 }
 
-void	shutdown_simulation(t_data *data)
+static void	shutdown_simulation(t_data *data)
 {
 	pthread_mutex_lock(&data->simulation_mutex);
 	data->simulation_running = 0;
 	pthread_mutex_unlock(&data->simulation_mutex);
 }
 
-int	check_coders_status(t_data *data)
+static int	check_coders_status(t_data *data)
 {
 	long	last_compile;
 	int		finished_coders;

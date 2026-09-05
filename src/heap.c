@@ -6,13 +6,13 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 15:02:45 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 11:01:35 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 21:33:50 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	swap(int *queue, int a, int b)
+static void	swap(int *queue, int a, int b)
 {
 	int	c;
 
@@ -21,7 +21,7 @@ void	swap(int *queue, int a, int b)
 	queue[b] = c;
 }
 
-void	shift_down(t_data *data, int i)
+static void	shift_down(t_data *data, int i)
 {
 	int	left;
 	int	right;

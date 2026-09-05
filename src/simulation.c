@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/04 11:49:41 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 12:21:18 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 21:33:50 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	start_simulation(t_data *data)
 	void		*arg;
 	pthread_t	monitor_thread;
 
+	if (data->num_compiles == 0)
+		return ;
 	i = 0;
 	while (i < data->num_coders)
 	{

@@ -3,8 +3,8 @@ NAME = codexion
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -pthread
 
-SRC = main.c parser.c simulation.c coders_routine.c coder_lifecycle.c \
-	  monitor_routine.c utils.c heap.c
+SRC = src/main.c src/parser.c src/simulation.c src/coders_routine.c \
+      src/coder_lifecycle.c src/monitor_routine.c src/utils.c src/heap.c src/init_env.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -13,7 +13,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-%.o: %.c main.h
+src/%.o: src/%.c src/main.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

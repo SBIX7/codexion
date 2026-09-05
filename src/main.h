@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/28 09:51:30 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 12:32:18 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 22:01:05 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct s_coder
 	pthread_mutex_t	state_mutex;
 }					t_coder;
 
-int					is_valid_argument(char *arg, int schedular);
 t_data				*parser(char **args);
 t_coder				*init_coders(t_data *data);
 int					setup_env(t_data *data, t_coder *coders);

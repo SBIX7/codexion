@@ -1,49 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/08/29 10:09:59 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 14:38:34 by msbii            ###   ########.fr       */
+/*   Created: 2026/09/05 22:04:00 by msbii             #+#    #+#             */
+/*   Updated: 2026/09/05 22:04:00 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-long	get_current_time(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
-}
-
-t_coder	*init_coders(t_data *data)
-{
-	t_coder	*coders;
-	int		i;
-
-	coders = malloc(sizeof(t_coder) * data->num_coders);
-	if (coders == NULL)
-		return (NULL);
-	i = 0;
-	while (i < data->num_coders)
-	{
-		coders[i].coder_id = i + 1;
-		coders[i].compile_count = 0;
-		coders[i].last_compile_time = 0;
-		coders[i].request_order = 0;
-		coders[i].data = data;
-		if (pthread_mutex_init(&coders[i].state_mutex, NULL) != 0)
-			return (NULL);
-		i++;
-	}
-	return (coders);
-}
-
-int	init_mutexs(t_data *data)
+static int	init_mutexs(t_data *data)
 {
 	int	i;
 	int	j;
@@ -69,7 +38,7 @@ int	init_mutexs(t_data *data)
 	return (0);
 }
 
-void	init_simulation_state(t_data *data)
+static void	init_simulation_state(t_data *data)
 {
 	int	i;
 
@@ -84,27 +53,33 @@ void	init_simulation_state(t_data *data)
 	data->simulation_running = 1;
 }
 
+static int	alloc_env(t_data *data)
+{
+	data->dongles = malloc(sizeof(pthread_mutex_t) * data->num_coders);
+	data->dongles_status = malloc(sizeof(long) * data->num_coders);
+	data->queue = malloc(sizeof(int) * data->num_coders);
+	if (!(data->queue && data->dongles && data->dongles_status))
+	{
+		free(data->dongles);
+		free(data->dongles_status);
+		free(data->queue);
+		return (1);
+	}
+	return (0);
+}
+
 int	setup_env(t_data *data, t_coder *coders)
 {
-	pthread_mutex_t	*dongles;
-	long			*dongles_status;
-	int				*queue;
-	int				i;
+	int	i;
 
-	dongles = malloc(sizeof(pthread_mutex_t) * data->num_coders);
-	dongles_status = malloc(sizeof(long) * data->num_coders);
-	queue = malloc(sizeof(int) * data->num_coders);
-	if (!(queue && dongles && dongles_status))
+	if (alloc_env(data) != 0)
 		return (1);
 	data->coders = coders;
-	data->dongles = dongles;
-	data->dongles_status = dongles_status;
-	data->queue = queue;
 	data->request_count = 0;
 	data->start_time = get_current_time();
-	i = 0;
-	while (++i <= data->num_coders)
-		data->coders[i - 1].last_compile_time = data->start_time;
+	i = -1;
+	while (++i < data->num_coders)
+		data->coders[i].last_compile_time = data->start_time;
 	if (init_mutexs(data) != 0)
 		return (1);
 	init_simulation_state(data);
