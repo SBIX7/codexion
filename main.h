@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/28 09:51:30 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 11:01:34 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 12:32:18 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/time.h>
 # include <unistd.h>
 
-struct s_coder;
+struct	s_coder;
 typedef struct s_data
 {
 	int				num_coders;
@@ -50,7 +50,6 @@ typedef struct s_coder
 	int				compile_count;
 	int				request_order;
 	pthread_t		thread;
-	pthread_cond_t	cond;
 	t_data			*data;
 	pthread_mutex_t	state_mutex;
 }					t_coder;
@@ -70,8 +69,6 @@ void				*routine(void *arg);
 void				*monitor_routine(void *arg);
 void				start_simulation(t_data *data);
 int					dongles_free(t_coder *coder, t_data *data);
-long				get_cooldown_remaining(t_data *data, t_coder *coder);
-void				set_timewait(struct timespec *ts, long wait_time);
 int					is_priority(t_data *data, int id_1, int id_2);
 void				extract_from_heap(t_data *data, int coder_id);
 int					can_take_dongles(t_data *data, t_coder *coder);

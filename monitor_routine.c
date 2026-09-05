@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 22:19:32 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 11:02:36 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 12:21:18 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void	precise_usleep(long time_in_ms, t_data *data)
 
 void	handle_coder_burnout(t_data *data, int i)
 {
-	int	j;
-
 	pthread_mutex_lock(&data->print_mutex);
 	pthread_mutex_lock(&data->simulation_mutex);
 	if (data->simulation_running)
@@ -33,12 +31,6 @@ void	handle_coder_burnout(t_data *data, int i)
 		printf("%ld %d burned out\n", get_current_time() - data->start_time,
 			data->coders[i].coder_id);
 	}
-	j = 0;
-	while (j < data->num_coders)
-	{
-		pthread_cond_signal(&data->coders[j].cond);
-		j++;
-	}
 	pthread_mutex_unlock(&data->simulation_mutex);
 	pthread_mutex_unlock(&data->print_mutex);
 	pthread_mutex_unlock(&data->coders[i].state_mutex);
@@ -46,16 +38,8 @@ void	handle_coder_burnout(t_data *data, int i)
 
 void	shutdown_simulation(t_data *data)
 {
-	int	i;
-
 	pthread_mutex_lock(&data->simulation_mutex);
 	data->simulation_running = 0;
-	i = 0;
-	while (i < data->num_coders)
-	{
-		pthread_cond_signal(&data->coders[i].cond);
-		i++;
-	}
 	pthread_mutex_unlock(&data->simulation_mutex);
 }
 

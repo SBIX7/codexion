@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 13:36:00 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 11:01:38 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 12:26:34 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,41 +56,6 @@ int	can_take_dongles(t_data *data, t_coder *coder)
 		i++;
 	}
 	return (1);
-}
-
-long	get_cooldown_remaining(t_data *data, t_coder *coder)
-{
-	int		idx1;
-	int		idx2;
-	long	current;
-	long	wait;
-
-	idx1 = coder->coder_id - 1;
-	idx2 = coder->coder_id % data->num_coders;
-	current = get_current_time();
-	wait = 0;
-	if (data->dongles_status[idx1] != -1
-		&& data->dongles_status[idx1] > current)
-		wait = data->dongles_status[idx1] - current;
-	if (data->dongles_status[idx2] != -1
-		&& data->dongles_status[idx2] > current)
-		if (data->dongles_status[idx2] - current > wait)
-			wait = data->dongles_status[idx2] - current;
-	return (wait);
-}
-
-void	set_timewait(struct timespec *ts, long wait_time)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	ts->tv_sec = tv.tv_sec + (wait_time / 1000);
-	ts->tv_nsec = (tv.tv_usec * 1000) + ((wait_time % 1000) * 1000000);
-	if (ts->tv_nsec >= 1000000000)
-	{
-		ts->tv_sec += 1;
-		ts->tv_nsec -= 1000000000;
-	}
 }
 
 void	*routine(void *arg)

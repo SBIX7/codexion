@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/04 11:49:41 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 11:01:38 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 12:21:18 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	clean_exit(t_data *data)
 	i = 0;
 	while (i < data->num_coders)
 	{
-		pthread_cond_destroy(&data->coders[i].cond);
 		pthread_mutex_destroy(&data->coders[i].state_mutex);
 		pthread_mutex_destroy(&data->dongles[i]);
 		i++;

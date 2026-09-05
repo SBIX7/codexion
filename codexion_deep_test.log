@@ -1,0 +1,2382 @@
+=== COMPILATION ===
+rm -f main.o parser.o simulation.o coders_routine.o coder_lifecycle.o monitor_routine.o utils.o heap.o
+rm -f codexion
+cc -Wall -Wextra -Werror -pthread -c main.c -o main.o
+cc -Wall -Wextra -Werror -pthread -c parser.c -o parser.o
+cc -Wall -Wextra -Werror -pthread -c simulation.c -o simulation.o
+cc -Wall -Wextra -Werror -pthread -c coders_routine.c -o coders_routine.o
+cc -Wall -Wextra -Werror -pthread -c coder_lifecycle.c -o coder_lifecycle.o
+cc -Wall -Wextra -Werror -pthread -c monitor_routine.c -o monitor_routine.o
+cc -Wall -Wextra -Werror -pthread -c utils.c -o utils.o
+cc -Wall -Wextra -Werror -pthread -c heap.c -o heap.o
+cc -Wall -Wextra -Werror -pthread main.o parser.o simulation.o coders_routine.o coder_lifecycle.o monitor_routine.o utils.o heap.o -o codexion
+
+
+
+===============================================================================
+TEST : ./codexion 1 800 200 200 200 10 0 fifo
+ATTENTE : Codeur unique, doit mourir vers 800ms
+===============================================================================
+>>> EXÉCUTION STANDARD
+801 1 burned out
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48280== Memcheck, a memory error detector
+==48280== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48280== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48280== Command: ./codexion 1 800 200 200 200 10 0 fifo
+==48280== 
+801 1 burned out
+==48280== 
+==48280== HEAP SUMMARY:
+==48280==     in use at exit: 0 bytes in 0 blocks
+==48280==   total heap usage: 8 allocs, 8 frees, 4,948 bytes allocated
+==48280== 
+==48280== All heap blocks were freed -- no leaks are possible
+==48280== 
+==48280== For lists of detected and suppressed errors, rerun with: -s
+==48280== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48283== Helgrind, a thread error detector
+==48283== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48283== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48283== Command: ./codexion 1 800 200 200 200 10 0 fifo
+==48283== 
+801 1 burned out
+==48283== 
+==48283== Use --history-level=approx or =none to gain increased speed, at
+==48283== the cost of reduced accuracy of conflicting-access information
+==48283== For lists of detected and suppressed errors, rerun with: -s
+==48283== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 12258 from 24)
+
+
+
+===============================================================================
+TEST : ./codexion 1 800 200 200 200 10 0 edf
+ATTENTE : Codeur unique, doit mourir vers 800ms
+===============================================================================
+>>> EXÉCUTION STANDARD
+801 1 burned out
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48313== Memcheck, a memory error detector
+==48313== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48313== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48313== Command: ./codexion 1 800 200 200 200 10 0 edf
+==48313== 
+801 1 burned out
+==48313== 
+==48313== HEAP SUMMARY:
+==48313==     in use at exit: 0 bytes in 0 blocks
+==48313==   total heap usage: 8 allocs, 8 frees, 4,948 bytes allocated
+==48313== 
+==48313== All heap blocks were freed -- no leaks are possible
+==48313== 
+==48313== For lists of detected and suppressed errors, rerun with: -s
+==48313== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48316== Helgrind, a thread error detector
+==48316== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48316== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48316== Command: ./codexion 1 800 200 200 200 10 0 edf
+==48316== 
+802 1 burned out
+==48316== 
+==48316== Use --history-level=approx or =none to gain increased speed, at
+==48316== the cost of reduced accuracy of conflicting-access information
+==48316== For lists of detected and suppressed errors, rerun with: -s
+==48316== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 12367 from 24)
+
+
+
+===============================================================================
+TEST : ./codexion 5 2000 200 200 200 5 0 fifo
+ATTENTE : 5 codeurs, temps large (2000ms), 5 compils, 0 cooldown. Aucun burnout.
+===============================================================================
+>>> EXÉCUTION STANDARD
+0 2 has taken a dongle
+0 2 has taken a dongle
+0 2 is compiling
+0 5 has taken a dongle
+0 5 has taken a dongle
+0 5 is compiling
+200 2 is debugging
+200 5 is debugging
+200 1 has taken a dongle
+200 1 has taken a dongle
+200 1 is compiling
+200 3 has taken a dongle
+200 3 has taken a dongle
+200 3 is compiling
+400 2 is refactoring
+400 5 is refactoring
+400 1 is debugging
+400 3 is debugging
+400 4 has taken a dongle
+400 4 has taken a dongle
+400 4 is compiling
+600 3 is refactoring
+600 1 is refactoring
+600 4 is debugging
+600 2 has taken a dongle
+600 2 has taken a dongle
+600 2 is compiling
+600 5 has taken a dongle
+600 5 has taken a dongle
+600 5 is compiling
+800 2 is debugging
+800 3 has taken a dongle
+800 3 has taken a dongle
+800 3 is compiling
+800 4 is refactoring
+800 5 is debugging
+800 1 has taken a dongle
+800 1 has taken a dongle
+800 1 is compiling
+1000 5 is refactoring
+1000 1 is debugging
+1000 2 is refactoring
+1000 3 is debugging
+1000 4 has taken a dongle
+1000 4 has taken a dongle
+1000 4 is compiling
+1200 3 is refactoring
+1200 2 has taken a dongle
+1200 2 has taken a dongle
+1200 2 is compiling
+1200 1 is refactoring
+1200 4 is debugging
+1200 5 has taken a dongle
+1200 5 has taken a dongle
+1200 5 is compiling
+1400 2 is debugging
+1400 5 is debugging
+1400 3 has taken a dongle
+1400 3 has taken a dongle
+1400 3 is compiling
+1400 4 is refactoring
+1400 1 has taken a dongle
+1400 1 has taken a dongle
+1400 1 is compiling
+1600 3 is debugging
+1600 5 is refactoring
+1600 4 has taken a dongle
+1600 4 has taken a dongle
+1600 4 is compiling
+1600 1 is debugging
+1600 2 is refactoring
+1800 2 has taken a dongle
+1800 2 has taken a dongle
+1800 2 is compiling
+1800 3 is refactoring
+1800 1 is refactoring
+1800 4 is debugging
+1800 5 has taken a dongle
+1800 5 has taken a dongle
+1800 5 is compiling
+2000 2 is debugging
+2000 3 has taken a dongle
+2000 3 has taken a dongle
+2000 3 is compiling
+2000 5 is debugging
+2000 4 is refactoring
+2000 1 has taken a dongle
+2000 1 has taken a dongle
+2000 1 is compiling
+2200 5 is refactoring
+2200 2 is refactoring
+2200 1 is debugging
+2200 3 is debugging
+2200 4 has taken a dongle
+2200 4 has taken a dongle
+2200 4 is compiling
+2400 4 is debugging
+2400 1 is refactoring
+2400 3 is refactoring
+2400 2 has taken a dongle
+2400 2 has taken a dongle
+2400 2 is compiling
+2400 5 has taken a dongle
+2400 5 has taken a dongle
+2400 5 is compiling
+2600 5 is debugging
+2600 4 is refactoring
+2600 2 is debugging
+2600 1 has taken a dongle
+2600 1 has taken a dongle
+2600 1 is compiling
+2600 3 has taken a dongle
+2600 3 has taken a dongle
+2600 3 is compiling
+2800 2 is refactoring
+2800 3 is debugging
+2800 1 is debugging
+2800 5 is refactoring
+2800 4 has taken a dongle
+2800 4 has taken a dongle
+2800 4 is compiling
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48340== Memcheck, a memory error detector
+==48340== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48340== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48340== Command: ./codexion 5 2000 200 200 200 5 0 fifo
+==48340== 
+93 2 has taken a dongle
+99 2 has taken a dongle
+99 2 is compiling
+100 4 has taken a dongle
+100 4 has taken a dongle
+100 4 is compiling
+300 2 is debugging
+300 4 is debugging
+300 3 has taken a dongle
+300 3 has taken a dongle
+300 3 is compiling
+301 1 has taken a dongle
+301 1 has taken a dongle
+301 1 is compiling
+500 3 is debugging
+500 2 is refactoring
+500 4 is refactoring
+501 1 is debugging
+501 5 has taken a dongle
+501 5 has taken a dongle
+501 5 is compiling
+700 3 is refactoring
+700 2 has taken a dongle
+700 2 has taken a dongle
+700 2 is compiling
+701 1 is refactoring
+701 5 is debugging
+701 4 has taken a dongle
+701 4 has taken a dongle
+701 4 is compiling
+900 2 is debugging
+901 5 is refactoring
+901 4 is debugging
+901 1 has taken a dongle
+901 1 has taken a dongle
+901 1 is compiling
+901 3 has taken a dongle
+901 3 has taken a dongle
+901 3 is compiling
+1100 2 is refactoring
+1101 4 is refactoring
+1101 1 is debugging
+1101 3 is debugging
+1101 5 has taken a dongle
+1101 5 has taken a dongle
+1101 5 is compiling
+1300 2 has taken a dongle
+1300 2 has taken a dongle
+1300 2 is compiling
+1301 1 is refactoring
+1301 3 is refactoring
+1301 5 is debugging
+1301 4 has taken a dongle
+1301 4 has taken a dongle
+1301 4 is compiling
+1500 2 is debugging
+1501 1 has taken a dongle
+1501 1 has taken a dongle
+1501 1 is compiling
+1501 5 is refactoring
+1501 4 is debugging
+1501 3 has taken a dongle
+1501 3 has taken a dongle
+1501 3 is compiling
+1700 2 is refactoring
+1701 1 is debugging
+1701 5 has taken a dongle
+1701 5 has taken a dongle
+1701 5 is compiling
+1701 3 is debugging
+1701 4 is refactoring
+1900 2 has taken a dongle
+1900 2 has taken a dongle
+1900 2 is compiling
+1901 3 is refactoring
+1901 1 is refactoring
+1901 5 is debugging
+1901 4 has taken a dongle
+1901 4 has taken a dongle
+1901 4 is compiling
+2100 2 is debugging
+2101 5 is refactoring
+2101 4 is debugging
+2101 1 has taken a dongle
+2101 1 has taken a dongle
+2101 1 is compiling
+2101 3 has taken a dongle
+2101 3 has taken a dongle
+2101 3 is compiling
+2300 2 is refactoring
+2301 1 is debugging
+2301 4 is refactoring
+2301 5 has taken a dongle
+2301 5 has taken a dongle
+2301 5 is compiling
+2301 3 is debugging
+2500 2 has taken a dongle
+2500 2 has taken a dongle
+2500 2 is compiling
+2501 3 is refactoring
+2501 1 is refactoring
+2501 5 is debugging
+2501 4 has taken a dongle
+2501 4 has taken a dongle
+2501 4 is compiling
+2700 2 is debugging
+2701 5 is refactoring
+2701 4 is debugging
+2701 1 has taken a dongle
+2701 1 has taken a dongle
+2701 1 is compiling
+2701 3 has taken a dongle
+2701 3 has taken a dongle
+2701 3 is compiling
+2900 2 is refactoring
+2901 3 is debugging
+2901 1 is debugging
+2901 4 is refactoring
+2901 5 has taken a dongle
+2901 5 has taken a dongle
+2901 5 is compiling
+==48340== 
+==48340== HEAP SUMMARY:
+==48340==     in use at exit: 0 bytes in 0 blocks
+==48340==   total heap usage: 12 allocs, 12 frees, 6,564 bytes allocated
+==48340== 
+==48340== All heap blocks were freed -- no leaks are possible
+==48340== 
+==48340== For lists of detected and suppressed errors, rerun with: -s
+==48340== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48347== Helgrind, a thread error detector
+==48347== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48347== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48347== Command: ./codexion 5 2000 200 200 200 5 0 fifo
+==48347== 
+6 1 has taken a dongle
+9 1 has taken a dongle
+9 1 is compiling
+12 3 has taken a dongle
+12 3 has taken a dongle
+12 3 is compiling
+209 1 is debugging
+209 5 has taken a dongle
+209 5 has taken a dongle
+209 5 is compiling
+212 3 is debugging
+212 2 has taken a dongle
+212 2 has taken a dongle
+212 2 is compiling
+409 1 is refactoring
+410 5 is debugging
+410 4 has taken a dongle
+410 4 has taken a dongle
+410 4 is compiling
+412 2 is debugging
+412 3 is refactoring
+609 1 has taken a dongle
+609 1 has taken a dongle
+609 1 is compiling
+610 4 is debugging
+610 5 is refactoring
+612 2 is refactoring
+612 3 has taken a dongle
+612 3 has taken a dongle
+612 3 is compiling
+809 1 is debugging
+810 5 has taken a dongle
+810 5 has taken a dongle
+810 5 is compiling
+810 4 is refactoring
+812 3 is debugging
+812 2 has taken a dongle
+812 2 has taken a dongle
+812 2 is compiling
+1009 1 is refactoring
+1010 5 is debugging
+1010 4 has taken a dongle
+1010 4 has taken a dongle
+1010 4 is compiling
+1012 3 is refactoring
+1012 2 is debugging
+1209 1 has taken a dongle
+1209 1 has taken a dongle
+1209 1 is compiling
+1210 5 is refactoring
+1210 4 is debugging
+1212 3 has taken a dongle
+1212 3 has taken a dongle
+1212 3 is compiling
+1212 2 is refactoring
+1409 1 is debugging
+1410 5 has taken a dongle
+1410 5 has taken a dongle
+1410 5 is compiling
+1410 4 is refactoring
+1412 3 is debugging
+1412 2 has taken a dongle
+1412 2 has taken a dongle
+1412 2 is compiling
+1609 1 is refactoring
+1610 5 is debugging
+1610 4 has taken a dongle
+1610 4 has taken a dongle
+1610 4 is compiling
+1612 3 is refactoring
+1612 2 is debugging
+1809 1 has taken a dongle
+1809 1 has taken a dongle
+1809 1 is compiling
+1810 4 is debugging
+1810 5 is refactoring
+1812 2 is refactoring
+1812 3 has taken a dongle
+1812 3 has taken a dongle
+1812 3 is compiling
+2009 1 is debugging
+2010 5 has taken a dongle
+2010 5 has taken a dongle
+2010 5 is compiling
+2010 4 is refactoring
+2012 3 is debugging
+2012 2 has taken a dongle
+2012 2 has taken a dongle
+2012 2 is compiling
+2209 1 is refactoring
+2210 5 is debugging
+2210 4 has taken a dongle
+2210 4 has taken a dongle
+2210 4 is compiling
+2212 3 is refactoring
+2212 2 is debugging
+2409 1 has taken a dongle
+2409 1 has taken a dongle
+2409 1 is compiling
+2410 4 is debugging
+2410 5 is refactoring
+2412 2 is refactoring
+2412 3 has taken a dongle
+2412 3 has taken a dongle
+2412 3 is compiling
+2609 1 is debugging
+2610 5 has taken a dongle
+2610 5 has taken a dongle
+2610 5 is compiling
+2610 4 is refactoring
+2612 3 is debugging
+2612 2 has taken a dongle
+2612 2 has taken a dongle
+2612 2 is compiling
+2809 1 is refactoring
+2810 5 is debugging
+2810 4 has taken a dongle
+2810 4 has taken a dongle
+2810 4 is compiling
+==48347== 
+==48347== Use --history-level=approx or =none to gain increased speed, at
+==48347== the cost of reduced accuracy of conflicting-access information
+==48347== For lists of detected and suppressed errors, rerun with: -s
+==48347== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 534297 from 91)
+
+
+
+===============================================================================
+TEST : ./codexion 5 2000 200 200 200 5 0 edf
+ATTENTE : 5 codeurs, temps large (2000ms), 5 compils, 0 cooldown. Aucun burnout.
+===============================================================================
+>>> EXÉCUTION STANDARD
+0 3 has taken a dongle
+0 3 has taken a dongle
+0 3 is compiling
+0 5 has taken a dongle
+0 5 has taken a dongle
+0 5 is compiling
+200 3 is debugging
+200 5 is debugging
+200 4 has taken a dongle
+200 4 has taken a dongle
+200 4 is compiling
+200 2 has taken a dongle
+200 2 has taken a dongle
+200 2 is compiling
+400 2 is debugging
+400 3 is refactoring
+400 4 is debugging
+400 1 has taken a dongle
+400 1 has taken a dongle
+400 1 is compiling
+400 5 is refactoring
+600 3 has taken a dongle
+600 3 has taken a dongle
+600 3 is compiling
+600 4 is refactoring
+600 1 is debugging
+600 2 is refactoring
+600 5 has taken a dongle
+600 5 has taken a dongle
+600 5 is compiling
+800 3 is debugging
+800 5 is debugging
+800 2 has taken a dongle
+800 2 has taken a dongle
+800 2 is compiling
+800 1 is refactoring
+800 4 has taken a dongle
+800 4 has taken a dongle
+800 4 is compiling
+1000 5 is refactoring
+1000 4 is debugging
+1000 3 is refactoring
+1000 2 is debugging
+1000 1 has taken a dongle
+1000 1 has taken a dongle
+1000 1 is compiling
+1200 4 is refactoring
+1200 1 is debugging
+1200 2 is refactoring
+1200 3 has taken a dongle
+1200 3 has taken a dongle
+1200 3 is compiling
+1200 5 has taken a dongle
+1200 5 has taken a dongle
+1200 5 is compiling
+1400 3 is debugging
+1400 5 is debugging
+1400 1 is refactoring
+1400 4 has taken a dongle
+1400 4 has taken a dongle
+1400 4 is compiling
+1400 2 has taken a dongle
+1400 2 has taken a dongle
+1400 2 is compiling
+1600 4 is debugging
+1600 3 is refactoring
+1600 5 is refactoring
+1600 2 is debugging
+1600 1 has taken a dongle
+1600 1 has taken a dongle
+1600 1 is compiling
+1800 3 has taken a dongle
+1800 3 has taken a dongle
+1800 3 is compiling
+1800 1 is debugging
+1800 2 is refactoring
+1800 4 is refactoring
+1800 5 has taken a dongle
+1800 5 has taken a dongle
+1800 5 is compiling
+2000 3 is debugging
+2000 1 is refactoring
+2000 5 is debugging
+2000 2 has taken a dongle
+2000 2 has taken a dongle
+2000 2 is compiling
+2000 4 has taken a dongle
+2000 4 has taken a dongle
+2000 4 is compiling
+2200 5 is refactoring
+2200 2 is debugging
+2200 4 is debugging
+2200 3 is refactoring
+2200 1 has taken a dongle
+2200 1 has taken a dongle
+2200 1 is compiling
+2400 3 has taken a dongle
+2400 3 has taken a dongle
+2400 3 is compiling
+2400 1 is debugging
+2400 2 is refactoring
+2400 4 is refactoring
+2400 5 has taken a dongle
+2400 5 has taken a dongle
+2400 5 is compiling
+2600 1 is refactoring
+2600 3 is debugging
+2600 5 is debugging
+2600 2 has taken a dongle
+2600 2 has taken a dongle
+2600 2 is compiling
+2600 4 has taken a dongle
+2600 4 has taken a dongle
+2600 4 is compiling
+2800 3 is refactoring
+2800 4 is debugging
+2800 5 is refactoring
+2800 2 is debugging
+2800 1 has taken a dongle
+2800 1 has taken a dongle
+2800 1 is compiling
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48374== Memcheck, a memory error detector
+==48374== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48374== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48374== Command: ./codexion 5 2000 200 200 200 5 0 edf
+==48374== 
+93 4 has taken a dongle
+98 4 has taken a dongle
+98 4 is compiling
+99 2 has taken a dongle
+99 2 has taken a dongle
+99 2 is compiling
+299 4 is debugging
+299 2 is debugging
+299 3 has taken a dongle
+299 3 has taken a dongle
+299 3 is compiling
+300 1 has taken a dongle
+300 1 has taken a dongle
+300 1 is compiling
+499 2 is refactoring
+499 3 is debugging
+499 4 is refactoring
+500 1 is debugging
+500 5 has taken a dongle
+500 5 has taken a dongle
+500 5 is compiling
+699 3 is refactoring
+699 2 has taken a dongle
+699 2 has taken a dongle
+699 2 is compiling
+700 5 is debugging
+700 1 is refactoring
+700 4 has taken a dongle
+700 4 has taken a dongle
+700 4 is compiling
+899 2 is debugging
+900 5 is refactoring
+900 1 has taken a dongle
+900 1 has taken a dongle
+900 1 is compiling
+900 4 is debugging
+900 3 has taken a dongle
+900 3 has taken a dongle
+900 3 is compiling
+1099 2 is refactoring
+1100 1 is debugging
+1100 3 is debugging
+1100 4 is refactoring
+1100 5 has taken a dongle
+1100 5 has taken a dongle
+1100 5 is compiling
+1299 2 has taken a dongle
+1299 2 has taken a dongle
+1299 2 is compiling
+1300 5 is debugging
+1300 3 is refactoring
+1300 4 has taken a dongle
+1300 4 has taken a dongle
+1300 4 is compiling
+1300 1 is refactoring
+1499 2 is debugging
+1500 5 is refactoring
+1500 4 is debugging
+1500 1 has taken a dongle
+1500 1 has taken a dongle
+1500 1 is compiling
+1500 3 has taken a dongle
+1500 3 has taken a dongle
+1500 3 is compiling
+1699 2 is refactoring
+1700 3 is debugging
+1700 1 is debugging
+1700 4 is refactoring
+1700 5 has taken a dongle
+1700 5 has taken a dongle
+1700 5 is compiling
+1899 2 has taken a dongle
+1899 2 has taken a dongle
+1899 2 is compiling
+1900 1 is refactoring
+1900 3 is refactoring
+1900 5 is debugging
+1900 4 has taken a dongle
+1900 4 has taken a dongle
+1900 4 is compiling
+2099 2 is debugging
+2100 4 is debugging
+2100 5 is refactoring
+2100 1 has taken a dongle
+2100 1 has taken a dongle
+2100 1 is compiling
+2100 3 has taken a dongle
+2100 3 has taken a dongle
+2100 3 is compiling
+2299 2 is refactoring
+2300 3 is debugging
+2300 1 is debugging
+2300 4 is refactoring
+2300 5 has taken a dongle
+2300 5 has taken a dongle
+2300 5 is compiling
+2499 2 has taken a dongle
+2499 2 has taken a dongle
+2499 2 is compiling
+2500 5 is debugging
+2500 3 is refactoring
+2500 1 is refactoring
+2500 4 has taken a dongle
+2500 4 has taken a dongle
+2500 4 is compiling
+2699 2 is debugging
+2700 5 is refactoring
+2700 4 is debugging
+2700 3 has taken a dongle
+2700 3 has taken a dongle
+2700 3 is compiling
+2700 1 has taken a dongle
+2700 1 has taken a dongle
+2700 1 is compiling
+2899 2 is refactoring
+2900 4 is refactoring
+2900 3 is debugging
+2900 1 is debugging
+2900 5 has taken a dongle
+2900 5 has taken a dongle
+2900 5 is compiling
+==48374== 
+==48374== HEAP SUMMARY:
+==48374==     in use at exit: 0 bytes in 0 blocks
+==48374==   total heap usage: 12 allocs, 12 frees, 6,564 bytes allocated
+==48374== 
+==48374== All heap blocks were freed -- no leaks are possible
+==48374== 
+==48374== For lists of detected and suppressed errors, rerun with: -s
+==48374== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48396== Helgrind, a thread error detector
+==48396== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48396== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48396== Command: ./codexion 5 2000 200 200 200 5 0 edf
+==48396== 
+6 1 has taken a dongle
+9 1 has taken a dongle
+9 1 is compiling
+11 3 has taken a dongle
+12 3 has taken a dongle
+12 3 is compiling
+209 1 is debugging
+210 5 has taken a dongle
+210 5 has taken a dongle
+210 5 is compiling
+212 3 is debugging
+212 2 has taken a dongle
+212 2 has taken a dongle
+212 2 is compiling
+409 1 is refactoring
+410 5 is debugging
+410 4 has taken a dongle
+410 4 has taken a dongle
+410 4 is compiling
+412 3 is refactoring
+412 2 is debugging
+609 1 has taken a dongle
+609 1 has taken a dongle
+609 1 is compiling
+610 5 is refactoring
+610 4 is debugging
+612 2 is refactoring
+612 3 has taken a dongle
+612 3 has taken a dongle
+612 3 is compiling
+809 1 is debugging
+810 5 has taken a dongle
+810 5 has taken a dongle
+810 5 is compiling
+810 4 is refactoring
+812 3 is debugging
+812 2 has taken a dongle
+812 2 has taken a dongle
+812 2 is compiling
+1009 1 is refactoring
+1010 5 is debugging
+1010 4 has taken a dongle
+1011 4 has taken a dongle
+1011 4 is compiling
+1012 3 is refactoring
+1012 2 is debugging
+1209 1 has taken a dongle
+1209 1 has taken a dongle
+1209 1 is compiling
+1210 5 is refactoring
+1211 4 is debugging
+1212 3 has taken a dongle
+1212 3 has taken a dongle
+1212 3 is compiling
+1212 2 is refactoring
+1409 1 is debugging
+1410 5 has taken a dongle
+1410 5 has taken a dongle
+1410 5 is compiling
+1411 4 is refactoring
+1412 3 is debugging
+1412 2 has taken a dongle
+1412 2 has taken a dongle
+1412 2 is compiling
+1609 1 is refactoring
+1610 5 is debugging
+1611 4 has taken a dongle
+1611 4 has taken a dongle
+1611 4 is compiling
+1612 3 is refactoring
+1612 2 is debugging
+1809 1 has taken a dongle
+1809 1 has taken a dongle
+1809 1 is compiling
+1810 5 is refactoring
+1811 4 is debugging
+1812 2 is refactoring
+1812 3 has taken a dongle
+1812 3 has taken a dongle
+1812 3 is compiling
+2009 1 is debugging
+2010 5 has taken a dongle
+2010 5 has taken a dongle
+2010 5 is compiling
+2011 4 is refactoring
+2012 3 is debugging
+2012 2 has taken a dongle
+2012 2 has taken a dongle
+2012 2 is compiling
+2209 1 is refactoring
+2210 5 is debugging
+2211 4 has taken a dongle
+2211 4 has taken a dongle
+2211 4 is compiling
+2212 2 is debugging
+2212 3 is refactoring
+2409 1 has taken a dongle
+2409 1 has taken a dongle
+2409 1 is compiling
+2410 5 is refactoring
+2411 4 is debugging
+2412 2 is refactoring
+2412 3 has taken a dongle
+2412 3 has taken a dongle
+2412 3 is compiling
+2609 1 is debugging
+2610 5 has taken a dongle
+2610 5 has taken a dongle
+2610 5 is compiling
+2611 4 is refactoring
+2612 3 is debugging
+2612 2 has taken a dongle
+2612 2 has taken a dongle
+2612 2 is compiling
+2809 1 is refactoring
+2810 5 is debugging
+2811 4 has taken a dongle
+2811 4 has taken a dongle
+2811 4 is compiling
+==48396== 
+==48396== Use --history-level=approx or =none to gain increased speed, at
+==48396== the cost of reduced accuracy of conflicting-access information
+==48396== For lists of detected and suppressed errors, rerun with: -s
+==48396== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 532308 from 91)
+
+
+
+===============================================================================
+TEST : ./codexion 5 500 200 200 200 10 0 fifo
+ATTENTE : Cycle de 600ms > burnout 500ms. Mort obligatoire.
+===============================================================================
+>>> EXÉCUTION STANDARD
+0 2 has taken a dongle
+0 2 has taken a dongle
+0 2 is compiling
+0 4 has taken a dongle
+0 4 has taken a dongle
+0 4 is compiling
+200 4 is debugging
+200 2 is debugging
+200 1 has taken a dongle
+200 1 has taken a dongle
+200 1 is compiling
+200 3 has taken a dongle
+200 3 has taken a dongle
+200 3 is compiling
+400 1 is debugging
+400 4 is refactoring
+400 2 is refactoring
+400 3 is debugging
+400 5 has taken a dongle
+400 5 has taken a dongle
+400 5 is compiling
+501 2 burned out
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48425== Memcheck, a memory error detector
+==48425== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48425== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48425== Command: ./codexion 5 500 200 200 200 10 0 fifo
+==48425== 
+93 2 has taken a dongle
+99 2 has taken a dongle
+99 2 is compiling
+100 4 has taken a dongle
+100 4 has taken a dongle
+100 4 is compiling
+299 2 is debugging
+300 1 has taken a dongle
+300 1 has taken a dongle
+300 1 is compiling
+300 4 is debugging
+300 3 has taken a dongle
+300 3 has taken a dongle
+300 3 is compiling
+499 2 is refactoring
+500 4 is refactoring
+500 3 is debugging
+500 1 is debugging
+500 5 has taken a dongle
+500 5 has taken a dongle
+500 5 is compiling
+594 2 burned out
+==48425== 
+==48425== HEAP SUMMARY:
+==48425==     in use at exit: 0 bytes in 0 blocks
+==48425==   total heap usage: 12 allocs, 12 frees, 6,564 bytes allocated
+==48425== 
+==48425== All heap blocks were freed -- no leaks are possible
+==48425== 
+==48425== For lists of detected and suppressed errors, rerun with: -s
+==48425== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48432== Helgrind, a thread error detector
+==48432== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48432== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48432== Command: ./codexion 5 500 200 200 200 10 0 fifo
+==48432== 
+7 1 has taken a dongle
+10 1 has taken a dongle
+10 1 is compiling
+13 3 has taken a dongle
+13 3 has taken a dongle
+13 3 is compiling
+210 1 is debugging
+210 5 has taken a dongle
+210 5 has taken a dongle
+211 5 is compiling
+213 3 is debugging
+213 2 has taken a dongle
+213 2 has taken a dongle
+213 2 is compiling
+410 1 is refactoring
+411 5 is debugging
+411 4 has taken a dongle
+411 4 has taken a dongle
+411 4 is compiling
+413 3 is refactoring
+413 2 is debugging
+509 1 burned out
+==48432== 
+==48432== Use --history-level=approx or =none to gain increased speed, at
+==48432== the cost of reduced accuracy of conflicting-access information
+==48432== For lists of detected and suppressed errors, rerun with: -s
+==48432== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 75755 from 101)
+
+
+
+===============================================================================
+TEST : ./codexion 5 500 200 200 200 10 0 edf
+ATTENTE : Cycle de 600ms > burnout 500ms. Mort obligatoire.
+===============================================================================
+>>> EXÉCUTION STANDARD
+0 3 has taken a dongle
+0 3 has taken a dongle
+0 3 is compiling
+0 1 has taken a dongle
+0 1 has taken a dongle
+0 1 is compiling
+200 3 is debugging
+200 1 is debugging
+200 4 has taken a dongle
+200 4 has taken a dongle
+200 4 is compiling
+200 2 has taken a dongle
+200 2 has taken a dongle
+200 2 is compiling
+400 1 is refactoring
+400 2 is debugging
+400 4 is debugging
+400 3 is refactoring
+400 5 has taken a dongle
+400 5 has taken a dongle
+400 5 is compiling
+501 1 burned out
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48454== Memcheck, a memory error detector
+==48454== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48454== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48454== Command: ./codexion 5 500 200 200 200 10 0 edf
+==48454== 
+94 2 has taken a dongle
+100 2 has taken a dongle
+100 2 is compiling
+101 4 has taken a dongle
+101 4 has taken a dongle
+101 4 is compiling
+301 2 is debugging
+301 4 is debugging
+302 3 has taken a dongle
+302 3 has taken a dongle
+302 3 is compiling
+303 5 has taken a dongle
+303 5 has taken a dongle
+303 5 is compiling
+501 2 is refactoring
+501 4 is refactoring
+501 1 burned out
+==48454== 
+==48454== HEAP SUMMARY:
+==48454==     in use at exit: 0 bytes in 0 blocks
+==48454==   total heap usage: 12 allocs, 12 frees, 6,564 bytes allocated
+==48454== 
+==48454== All heap blocks were freed -- no leaks are possible
+==48454== 
+==48454== For lists of detected and suppressed errors, rerun with: -s
+==48454== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48461== Helgrind, a thread error detector
+==48461== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48461== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48461== Command: ./codexion 5 500 200 200 200 10 0 edf
+==48461== 
+6 1 has taken a dongle
+9 1 has taken a dongle
+9 1 is compiling
+12 3 has taken a dongle
+12 3 has taken a dongle
+12 3 is compiling
+210 1 is debugging
+211 5 has taken a dongle
+211 5 has taken a dongle
+211 5 is compiling
+212 3 is debugging
+212 2 has taken a dongle
+212 2 has taken a dongle
+212 2 is compiling
+410 1 is refactoring
+411 5 is debugging
+411 4 has taken a dongle
+411 4 has taken a dongle
+411 4 is compiling
+412 2 is debugging
+412 3 is refactoring
+507 1 burned out
+==48461== 
+==48461== Use --history-level=approx or =none to gain increased speed, at
+==48461== the cost of reduced accuracy of conflicting-access information
+==48461== For lists of detected and suppressed errors, rerun with: -s
+==48461== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 75140 from 101)
+
+
+
+===============================================================================
+TEST : ./codexion 5 3000 200 200 200 5 400 fifo
+ATTENTE : Cooldown de 400ms. Aucun burnout, dongles bloqués 400ms.
+===============================================================================
+>>> EXÉCUTION STANDARD
+0 2 has taken a dongle
+0 2 has taken a dongle
+0 2 is compiling
+0 5 has taken a dongle
+0 5 has taken a dongle
+0 5 is compiling
+200 5 is debugging
+200 2 is debugging
+400 2 is refactoring
+400 5 is refactoring
+600 3 has taken a dongle
+600 3 has taken a dongle
+600 3 is compiling
+600 1 has taken a dongle
+600 1 has taken a dongle
+600 1 is compiling
+800 1 is debugging
+800 3 is debugging
+1000 3 is refactoring
+1000 1 is refactoring
+1200 2 has taken a dongle
+1200 2 has taken a dongle
+1200 2 is compiling
+1200 4 has taken a dongle
+1200 4 has taken a dongle
+1200 4 is compiling
+1400 2 is debugging
+1400 4 is debugging
+1600 2 is refactoring
+1600 4 is refactoring
+1800 5 has taken a dongle
+1800 5 has taken a dongle
+1800 5 is compiling
+1800 3 has taken a dongle
+1800 3 has taken a dongle
+1800 3 is compiling
+2000 3 is debugging
+2000 5 is debugging
+2200 3 is refactoring
+2200 5 is refactoring
+2400 1 has taken a dongle
+2400 1 has taken a dongle
+2400 1 is compiling
+2400 4 has taken a dongle
+2400 4 has taken a dongle
+2400 4 is compiling
+2600 4 is debugging
+2600 1 is debugging
+2800 1 is refactoring
+2800 4 is refactoring
+3000 5 has taken a dongle
+3000 5 has taken a dongle
+3000 5 is compiling
+3000 2 has taken a dongle
+3000 2 has taken a dongle
+3000 2 is compiling
+3200 2 is debugging
+3200 5 is debugging
+3400 2 is refactoring
+3400 5 is refactoring
+3600 3 has taken a dongle
+3600 3 has taken a dongle
+3600 3 is compiling
+3600 1 has taken a dongle
+3600 1 has taken a dongle
+3600 1 is compiling
+3800 1 is debugging
+3800 3 is debugging
+4000 3 is refactoring
+4000 1 is refactoring
+4200 2 has taken a dongle
+4200 2 has taken a dongle
+4200 2 is compiling
+4200 4 has taken a dongle
+4200 4 has taken a dongle
+4200 4 is compiling
+4400 2 is debugging
+4400 4 is debugging
+4600 4 is refactoring
+4600 2 is refactoring
+4800 5 has taken a dongle
+4800 5 has taken a dongle
+4800 5 is compiling
+4800 3 has taken a dongle
+4800 3 has taken a dongle
+4800 3 is compiling
+5000 3 is debugging
+5000 5 is debugging
+5200 5 is refactoring
+5200 3 is refactoring
+5400 4 has taken a dongle
+5400 4 has taken a dongle
+5400 4 is compiling
+5400 1 has taken a dongle
+5400 1 has taken a dongle
+5400 1 is compiling
+5600 4 is debugging
+5600 1 is debugging
+5800 4 is refactoring
+5800 1 is refactoring
+6000 2 has taken a dongle
+6000 2 has taken a dongle
+6000 2 is compiling
+6000 5 has taken a dongle
+6000 5 has taken a dongle
+6000 5 is compiling
+6200 2 is debugging
+6200 5 is debugging
+6400 5 is refactoring
+6400 2 is refactoring
+6600 1 has taken a dongle
+6600 1 has taken a dongle
+6600 1 is compiling
+6600 3 has taken a dongle
+6600 3 has taken a dongle
+6600 3 is compiling
+6800 1 is debugging
+6800 3 is debugging
+7000 3 is refactoring
+7000 1 is refactoring
+7200 4 has taken a dongle
+7200 4 has taken a dongle
+7200 4 is compiling
+7200 2 has taken a dongle
+7200 2 has taken a dongle
+7200 2 is compiling
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48517== Memcheck, a memory error detector
+==48517== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48517== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48517== Command: ./codexion 5 3000 200 200 200 5 400 fifo
+==48517== 
+93 2 has taken a dongle
+99 2 has taken a dongle
+99 2 is compiling
+100 4 has taken a dongle
+100 4 has taken a dongle
+100 4 is compiling
+300 2 is debugging
+300 4 is debugging
+500 2 is refactoring
+500 4 is refactoring
+700 1 has taken a dongle
+700 1 has taken a dongle
+700 1 is compiling
+701 3 has taken a dongle
+701 3 has taken a dongle
+701 3 is compiling
+900 1 is debugging
+901 3 is debugging
+1100 1 is refactoring
+1101 3 is refactoring
+1301 5 has taken a dongle
+1301 5 has taken a dongle
+1301 5 is compiling
+1301 2 has taken a dongle
+1301 2 has taken a dongle
+1301 2 is compiling
+1501 5 is debugging
+1501 2 is debugging
+1701 2 is refactoring
+1701 5 is refactoring
+1901 1 has taken a dongle
+1901 1 has taken a dongle
+1901 1 is compiling
+1901 4 has taken a dongle
+1901 4 has taken a dongle
+1901 4 is compiling
+2101 4 is debugging
+2101 1 is debugging
+2301 4 is refactoring
+2301 1 is refactoring
+2501 3 has taken a dongle
+2501 3 has taken a dongle
+2501 3 is compiling
+2501 5 has taken a dongle
+2501 5 has taken a dongle
+2501 5 is compiling
+2701 5 is debugging
+2701 3 is debugging
+2901 5 is refactoring
+2901 3 is refactoring
+3101 2 has taken a dongle
+3101 2 has taken a dongle
+3101 2 is compiling
+3101 4 has taken a dongle
+3101 4 has taken a dongle
+3101 4 is compiling
+3301 2 is debugging
+3301 4 is debugging
+3501 4 is refactoring
+3501 2 is refactoring
+3701 1 has taken a dongle
+3701 1 has taken a dongle
+3701 1 is compiling
+3701 3 has taken a dongle
+3701 3 has taken a dongle
+3701 3 is compiling
+3901 1 is debugging
+3901 3 is debugging
+4101 3 is refactoring
+4101 1 is refactoring
+4301 2 has taken a dongle
+4301 2 has taken a dongle
+4301 2 is compiling
+4301 5 has taken a dongle
+4301 5 has taken a dongle
+4301 5 is compiling
+4501 2 is debugging
+4501 5 is debugging
+4701 2 is refactoring
+4701 5 is refactoring
+4901 1 has taken a dongle
+4901 1 has taken a dongle
+4901 1 is compiling
+4901 4 has taken a dongle
+4901 4 has taken a dongle
+4901 4 is compiling
+5101 1 is debugging
+5101 4 is debugging
+5301 1 is refactoring
+5301 4 is refactoring
+5501 5 has taken a dongle
+5501 5 has taken a dongle
+5501 5 is compiling
+5501 3 has taken a dongle
+5501 3 has taken a dongle
+5501 3 is compiling
+5701 3 is debugging
+5701 5 is debugging
+5901 3 is refactoring
+5901 5 is refactoring
+6101 2 has taken a dongle
+6101 2 has taken a dongle
+6101 2 is compiling
+6101 4 has taken a dongle
+6101 4 has taken a dongle
+6101 4 is compiling
+6301 4 is debugging
+6301 2 is debugging
+6501 4 is refactoring
+6501 2 is refactoring
+6701 3 has taken a dongle
+6701 3 has taken a dongle
+6701 3 is compiling
+6701 1 has taken a dongle
+6701 1 has taken a dongle
+6701 1 is compiling
+6901 1 is debugging
+6901 3 is debugging
+7101 3 is refactoring
+7101 1 is refactoring
+7301 5 has taken a dongle
+7301 5 has taken a dongle
+7301 5 is compiling
+7301 2 has taken a dongle
+7301 2 has taken a dongle
+7301 2 is compiling
+==48517== 
+==48517== HEAP SUMMARY:
+==48517==     in use at exit: 0 bytes in 0 blocks
+==48517==   total heap usage: 12 allocs, 12 frees, 6,564 bytes allocated
+==48517== 
+==48517== All heap blocks were freed -- no leaks are possible
+==48517== 
+==48517== For lists of detected and suppressed errors, rerun with: -s
+==48517== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48536== Helgrind, a thread error detector
+==48536== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48536== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48536== Command: ./codexion 5 3000 200 200 200 5 400 fifo
+==48536== 
+7 1 has taken a dongle
+9 1 has taken a dongle
+10 1 is compiling
+12 3 has taken a dongle
+12 3 has taken a dongle
+13 3 is compiling
+210 1 is debugging
+213 3 is debugging
+410 1 is refactoring
+413 3 is refactoring
+613 2 has taken a dongle
+613 2 has taken a dongle
+613 2 is compiling
+613 4 has taken a dongle
+613 4 has taken a dongle
+614 4 is compiling
+813 2 is debugging
+814 4 is debugging
+1013 2 is refactoring
+1014 4 is refactoring
+1214 3 has taken a dongle
+1214 3 has taken a dongle
+1214 3 is compiling
+1214 5 has taken a dongle
+1214 5 has taken a dongle
+1214 5 is compiling
+1414 5 is debugging
+1414 3 is debugging
+1614 5 is refactoring
+1614 3 is refactoring
+1814 1 has taken a dongle
+1814 1 has taken a dongle
+1814 1 is compiling
+1814 4 has taken a dongle
+1814 4 has taken a dongle
+1814 4 is compiling
+2014 4 is debugging
+2014 1 is debugging
+2214 4 is refactoring
+2214 1 is refactoring
+2414 5 has taken a dongle
+2414 5 has taken a dongle
+2414 5 is compiling
+2414 2 has taken a dongle
+2414 2 has taken a dongle
+2414 2 is compiling
+2614 5 is debugging
+2614 2 is debugging
+2814 2 is refactoring
+2814 5 is refactoring
+3014 3 has taken a dongle
+3014 3 has taken a dongle
+3014 3 is compiling
+3014 1 has taken a dongle
+3014 1 has taken a dongle
+3014 1 is compiling
+3214 3 is debugging
+3214 1 is debugging
+3414 3 is refactoring
+3414 1 is refactoring
+3614 4 has taken a dongle
+3614 4 has taken a dongle
+3614 4 is compiling
+3614 2 has taken a dongle
+3614 2 has taken a dongle
+3614 2 is compiling
+3814 2 is debugging
+3814 4 is debugging
+4014 4 is refactoring
+4014 2 is refactoring
+4214 5 has taken a dongle
+4214 5 has taken a dongle
+4214 5 is compiling
+4214 3 has taken a dongle
+4214 3 has taken a dongle
+4214 3 is compiling
+4414 3 is debugging
+4414 5 is debugging
+4614 5 is refactoring
+4614 3 is refactoring
+4814 4 has taken a dongle
+4814 4 has taken a dongle
+4814 4 is compiling
+4814 1 has taken a dongle
+4814 1 has taken a dongle
+4814 1 is compiling
+5014 1 is debugging
+5014 4 is debugging
+5214 4 is refactoring
+5214 1 is refactoring
+5414 2 has taken a dongle
+5414 2 has taken a dongle
+5414 2 is compiling
+5414 5 has taken a dongle
+5414 5 has taken a dongle
+5414 5 is compiling
+5614 5 is debugging
+5614 2 is debugging
+5814 5 is refactoring
+5814 2 is refactoring
+6014 3 has taken a dongle
+6014 3 has taken a dongle
+6014 3 is compiling
+6014 1 has taken a dongle
+6014 1 has taken a dongle
+6014 1 is compiling
+6214 1 is debugging
+6214 3 is debugging
+6414 3 is refactoring
+6414 1 is refactoring
+6614 4 has taken a dongle
+6614 4 has taken a dongle
+6614 4 is compiling
+6614 2 has taken a dongle
+6614 2 has taken a dongle
+6614 2 is compiling
+6814 4 is debugging
+6814 2 is debugging
+7014 4 is refactoring
+7014 2 is refactoring
+7214 3 has taken a dongle
+7214 3 has taken a dongle
+7214 3 is compiling
+7214 5 has taken a dongle
+7214 5 has taken a dongle
+7214 5 is compiling
+==48536== 
+==48536== Use --history-level=approx or =none to gain increased speed, at
+==48536== the cost of reduced accuracy of conflicting-access information
+==48536== For lists of detected and suppressed errors, rerun with: -s
+==48536== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 871870 from 94)
+
+
+
+===============================================================================
+TEST : ./codexion 5 3000 200 200 200 5 400 edf
+ATTENTE : Cooldown de 400ms. Aucun burnout, dongles bloqués 400ms.
+===============================================================================
+>>> EXÉCUTION STANDARD
+0 1 has taken a dongle
+0 1 has taken a dongle
+0 1 is compiling
+0 4 has taken a dongle
+0 4 has taken a dongle
+0 4 is compiling
+200 4 is debugging
+200 1 is debugging
+400 4 is refactoring
+400 1 is refactoring
+600 2 has taken a dongle
+600 2 has taken a dongle
+600 2 is compiling
+600 5 has taken a dongle
+600 5 has taken a dongle
+600 5 is compiling
+800 5 is debugging
+800 2 is debugging
+1000 5 is refactoring
+1000 2 is refactoring
+1200 3 has taken a dongle
+1200 3 has taken a dongle
+1200 3 is compiling
+1200 1 has taken a dongle
+1200 1 has taken a dongle
+1200 1 is compiling
+1400 3 is debugging
+1400 1 is debugging
+1600 3 is refactoring
+1600 1 is refactoring
+1800 4 has taken a dongle
+1800 4 has taken a dongle
+1800 4 is compiling
+1800 2 has taken a dongle
+1800 2 has taken a dongle
+1800 2 is compiling
+2000 4 is debugging
+2000 2 is debugging
+2200 2 is refactoring
+2200 4 is refactoring
+2400 3 has taken a dongle
+2400 3 has taken a dongle
+2400 3 is compiling
+2400 5 has taken a dongle
+2400 5 has taken a dongle
+2400 5 is compiling
+2600 3 is debugging
+2600 5 is debugging
+2800 3 is refactoring
+2800 5 is refactoring
+3000 1 has taken a dongle
+3000 1 has taken a dongle
+3000 1 is compiling
+3000 4 has taken a dongle
+3000 4 has taken a dongle
+3000 4 is compiling
+3200 4 is debugging
+3200 1 is debugging
+3400 1 is refactoring
+3400 4 is refactoring
+3600 2 has taken a dongle
+3600 2 has taken a dongle
+3600 2 is compiling
+3600 5 has taken a dongle
+3600 5 has taken a dongle
+3600 5 is compiling
+3800 5 is debugging
+3800 2 is debugging
+4000 2 is refactoring
+4000 5 is refactoring
+4200 3 has taken a dongle
+4200 3 has taken a dongle
+4200 3 is compiling
+4200 1 has taken a dongle
+4200 1 has taken a dongle
+4200 1 is compiling
+4400 1 is debugging
+4400 3 is debugging
+4600 1 is refactoring
+4600 3 is refactoring
+4800 4 has taken a dongle
+4800 4 has taken a dongle
+4800 4 is compiling
+4800 2 has taken a dongle
+4800 2 has taken a dongle
+4800 2 is compiling
+5000 2 is debugging
+5000 4 is debugging
+5200 2 is refactoring
+5200 4 is refactoring
+5400 5 has taken a dongle
+5400 5 has taken a dongle
+5400 5 is compiling
+5400 3 has taken a dongle
+5400 3 has taken a dongle
+5400 3 is compiling
+5600 3 is debugging
+5600 5 is debugging
+5800 3 is refactoring
+5800 5 is refactoring
+6000 1 has taken a dongle
+6000 1 has taken a dongle
+6000 1 is compiling
+6000 4 has taken a dongle
+6000 4 has taken a dongle
+6000 4 is compiling
+6200 4 is debugging
+6200 1 is debugging
+6400 1 is refactoring
+6400 4 is refactoring
+6600 2 has taken a dongle
+6600 2 has taken a dongle
+6600 2 is compiling
+6600 5 has taken a dongle
+6600 5 has taken a dongle
+6600 5 is compiling
+6800 5 is debugging
+6800 2 is debugging
+7000 2 is refactoring
+7000 5 is refactoring
+7200 3 has taken a dongle
+7200 3 has taken a dongle
+7200 3 is compiling
+7200 1 has taken a dongle
+7200 1 has taken a dongle
+7200 1 is compiling
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48575== Memcheck, a memory error detector
+==48575== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48575== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48575== Command: ./codexion 5 3000 200 200 200 5 400 edf
+==48575== 
+93 1 has taken a dongle
+99 1 has taken a dongle
+99 1 is compiling
+99 4 has taken a dongle
+99 4 has taken a dongle
+100 4 is compiling
+299 1 is debugging
+300 4 is debugging
+499 1 is refactoring
+500 4 is refactoring
+701 2 has taken a dongle
+701 2 has taken a dongle
+701 2 is compiling
+701 5 has taken a dongle
+701 5 has taken a dongle
+701 5 is compiling
+901 5 is debugging
+901 2 is debugging
+1101 5 is refactoring
+1101 2 is refactoring
+1301 3 has taken a dongle
+1301 3 has taken a dongle
+1301 3 is compiling
+1301 1 has taken a dongle
+1301 1 has taken a dongle
+1301 1 is compiling
+1501 3 is debugging
+1501 1 is debugging
+1701 3 is refactoring
+1701 1 is refactoring
+1901 2 has taken a dongle
+1901 2 has taken a dongle
+1901 2 is compiling
+1901 4 has taken a dongle
+1901 4 has taken a dongle
+1901 4 is compiling
+2101 4 is debugging
+2101 2 is debugging
+2301 4 is refactoring
+2301 2 is refactoring
+2501 5 has taken a dongle
+2501 5 has taken a dongle
+2501 5 is compiling
+2501 3 has taken a dongle
+2501 3 has taken a dongle
+2501 3 is compiling
+2701 5 is debugging
+2701 3 is debugging
+2901 3 is refactoring
+2901 5 is refactoring
+3101 4 has taken a dongle
+3101 4 has taken a dongle
+3101 4 is compiling
+3101 1 has taken a dongle
+3101 1 has taken a dongle
+3101 1 is compiling
+3301 4 is debugging
+3301 1 is debugging
+3501 4 is refactoring
+3501 1 is refactoring
+3701 2 has taken a dongle
+3701 2 has taken a dongle
+3701 2 is compiling
+3701 5 has taken a dongle
+3701 5 has taken a dongle
+3701 5 is compiling
+3901 5 is debugging
+3901 2 is debugging
+4101 5 is refactoring
+4101 2 is refactoring
+4301 1 has taken a dongle
+4301 1 has taken a dongle
+4301 1 is compiling
+4301 3 has taken a dongle
+4301 3 has taken a dongle
+4301 3 is compiling
+4501 3 is debugging
+4501 1 is debugging
+4701 3 is refactoring
+4701 1 is refactoring
+4901 2 has taken a dongle
+4901 2 has taken a dongle
+4901 2 is compiling
+4901 4 has taken a dongle
+4901 4 has taken a dongle
+4901 4 is compiling
+5101 4 is debugging
+5101 2 is debugging
+5301 4 is refactoring
+5301 2 is refactoring
+5501 3 has taken a dongle
+5501 3 has taken a dongle
+5501 3 is compiling
+5501 5 has taken a dongle
+5501 5 has taken a dongle
+5501 5 is compiling
+5701 3 is debugging
+5701 5 is debugging
+5901 5 is refactoring
+5901 3 is refactoring
+6101 4 has taken a dongle
+6101 4 has taken a dongle
+6101 4 is compiling
+6101 1 has taken a dongle
+6101 1 has taken a dongle
+6101 1 is compiling
+6301 1 is debugging
+6301 4 is debugging
+6501 4 is refactoring
+6501 1 is refactoring
+6701 2 has taken a dongle
+6701 2 has taken a dongle
+6701 2 is compiling
+6701 5 has taken a dongle
+6701 5 has taken a dongle
+6701 5 is compiling
+6901 2 is debugging
+6901 5 is debugging
+7101 2 is refactoring
+7101 5 is refactoring
+7301 3 has taken a dongle
+7301 3 has taken a dongle
+7301 3 is compiling
+7301 1 has taken a dongle
+7301 1 has taken a dongle
+7301 1 is compiling
+==48575== 
+==48575== HEAP SUMMARY:
+==48575==     in use at exit: 0 bytes in 0 blocks
+==48575==   total heap usage: 12 allocs, 12 frees, 6,564 bytes allocated
+==48575== 
+==48575== All heap blocks were freed -- no leaks are possible
+==48575== 
+==48575== For lists of detected and suppressed errors, rerun with: -s
+==48575== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48601== Helgrind, a thread error detector
+==48601== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48601== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48601== Command: ./codexion 5 3000 200 200 200 5 400 edf
+==48601== 
+6 1 has taken a dongle
+9 1 has taken a dongle
+9 1 is compiling
+11 3 has taken a dongle
+11 3 has taken a dongle
+11 3 is compiling
+209 1 is debugging
+211 3 is debugging
+409 1 is refactoring
+411 3 is refactoring
+611 2 has taken a dongle
+611 2 has taken a dongle
+611 2 is compiling
+612 4 has taken a dongle
+612 4 has taken a dongle
+612 4 is compiling
+811 2 is debugging
+812 4 is debugging
+1011 2 is refactoring
+1012 4 is refactoring
+1212 5 has taken a dongle
+1212 5 has taken a dongle
+1212 5 is compiling
+1212 3 has taken a dongle
+1212 3 has taken a dongle
+1212 3 is compiling
+1412 5 is debugging
+1412 3 is debugging
+1612 5 is refactoring
+1612 3 is refactoring
+1812 1 has taken a dongle
+1812 1 has taken a dongle
+1812 1 is compiling
+1812 4 has taken a dongle
+1812 4 has taken a dongle
+1812 4 is compiling
+2012 1 is debugging
+2012 4 is debugging
+2212 4 is refactoring
+2212 1 is refactoring
+2412 5 has taken a dongle
+2412 5 has taken a dongle
+2412 5 is compiling
+2412 2 has taken a dongle
+2412 2 has taken a dongle
+2412 2 is compiling
+2612 2 is debugging
+2612 5 is debugging
+2812 5 is refactoring
+2812 2 is refactoring
+3012 1 has taken a dongle
+3012 1 has taken a dongle
+3012 1 is compiling
+3012 3 has taken a dongle
+3012 3 has taken a dongle
+3012 3 is compiling
+3212 1 is debugging
+3212 3 is debugging
+3412 1 is refactoring
+3412 3 is refactoring
+3612 4 has taken a dongle
+3612 4 has taken a dongle
+3612 4 is compiling
+3612 2 has taken a dongle
+3612 2 has taken a dongle
+3612 2 is compiling
+3812 2 is debugging
+3812 4 is debugging
+4012 4 is refactoring
+4012 2 is refactoring
+4212 5 has taken a dongle
+4212 5 has taken a dongle
+4212 5 is compiling
+4212 3 has taken a dongle
+4212 3 has taken a dongle
+4212 3 is compiling
+4412 3 is debugging
+4412 5 is debugging
+4612 5 is refactoring
+4612 3 is refactoring
+4812 1 has taken a dongle
+4812 1 has taken a dongle
+4812 1 is compiling
+4812 4 has taken a dongle
+4812 4 has taken a dongle
+4812 4 is compiling
+5012 4 is debugging
+5012 1 is debugging
+5212 4 is refactoring
+5212 1 is refactoring
+5412 5 has taken a dongle
+5412 5 has taken a dongle
+5412 5 is compiling
+5412 2 has taken a dongle
+5412 2 has taken a dongle
+5412 2 is compiling
+5612 5 is debugging
+5612 2 is debugging
+5812 2 is refactoring
+5812 5 is refactoring
+6012 1 has taken a dongle
+6012 1 has taken a dongle
+6012 1 is compiling
+6012 3 has taken a dongle
+6012 3 has taken a dongle
+6012 3 is compiling
+6212 1 is debugging
+6212 3 is debugging
+6412 3 is refactoring
+6412 1 is refactoring
+6612 4 has taken a dongle
+6612 4 has taken a dongle
+6612 4 is compiling
+6612 2 has taken a dongle
+6612 2 has taken a dongle
+6612 2 is compiling
+6812 4 is debugging
+6812 2 is debugging
+7012 4 is refactoring
+7012 2 is refactoring
+7212 3 has taken a dongle
+7212 3 has taken a dongle
+7212 3 is compiling
+7212 5 has taken a dongle
+7213 5 has taken a dongle
+7213 5 is compiling
+==48601== 
+==48601== Use --history-level=approx or =none to gain increased speed, at
+==48601== the cost of reduced accuracy of conflicting-access information
+==48601== For lists of detected and suppressed errors, rerun with: -s
+==48601== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 874086 from 94)
+
+
+
+===============================================================================
+TEST : ./codexion 5 3000 200 200 200 5 800 fifo
+ATTENTE : Forte contention (800ms cooldown). Ordre strict FIFO.
+===============================================================================
+>>> EXÉCUTION STANDARD
+0 1 has taken a dongle
+0 1 has taken a dongle
+0 1 is compiling
+0 3 has taken a dongle
+0 3 has taken a dongle
+0 3 is compiling
+200 1 is debugging
+200 3 is debugging
+400 3 is refactoring
+400 1 is refactoring
+1000 2 has taken a dongle
+1000 2 has taken a dongle
+1000 2 is compiling
+1000 4 has taken a dongle
+1000 4 has taken a dongle
+1000 4 is compiling
+1200 2 is debugging
+1200 4 is debugging
+1400 4 is refactoring
+1400 2 is refactoring
+2000 5 has taken a dongle
+2000 5 has taken a dongle
+2000 5 is compiling
+2000 3 has taken a dongle
+2000 3 has taken a dongle
+2000 3 is compiling
+2200 3 is debugging
+2200 5 is debugging
+2400 3 is refactoring
+2400 5 is refactoring
+3000 1 has taken a dongle
+3000 1 has taken a dongle
+3000 1 is compiling
+3000 4 has taken a dongle
+3000 4 has taken a dongle
+3000 4 is compiling
+3200 4 is debugging
+3200 1 is debugging
+3400 1 is refactoring
+3400 4 is refactoring
+4000 2 has taken a dongle
+4000 2 has taken a dongle
+4000 2 is compiling
+4000 5 has taken a dongle
+4000 5 has taken a dongle
+4000 5 is compiling
+4200 5 is debugging
+4200 2 is debugging
+4400 2 is refactoring
+4400 5 is refactoring
+5000 1 has taken a dongle
+5000 1 has taken a dongle
+5000 1 is compiling
+5000 3 has taken a dongle
+5000 3 has taken a dongle
+5000 3 is compiling
+5200 1 is debugging
+5200 3 is debugging
+5400 3 is refactoring
+5400 1 is refactoring
+6000 2 has taken a dongle
+6000 2 has taken a dongle
+6000 2 is compiling
+6000 4 has taken a dongle
+6000 4 has taken a dongle
+6000 4 is compiling
+6200 2 is debugging
+6200 4 is debugging
+6400 4 is refactoring
+6400 2 is refactoring
+7000 3 has taken a dongle
+7000 3 has taken a dongle
+7000 3 is compiling
+7000 5 has taken a dongle
+7000 5 has taken a dongle
+7000 5 is compiling
+7200 5 is debugging
+7200 3 is debugging
+7400 3 is refactoring
+7400 5 is refactoring
+8000 1 has taken a dongle
+8000 1 has taken a dongle
+8000 1 is compiling
+8000 4 has taken a dongle
+8000 4 has taken a dongle
+8000 4 is compiling
+8200 4 is debugging
+8200 1 is debugging
+8400 1 is refactoring
+8400 4 is refactoring
+9000 2 has taken a dongle
+9000 2 has taken a dongle
+9000 2 is compiling
+9000 5 has taken a dongle
+9000 5 has taken a dongle
+9000 5 is compiling
+9200 5 is debugging
+9200 2 is debugging
+9400 5 is refactoring
+9400 2 is refactoring
+10000 1 has taken a dongle
+10000 1 has taken a dongle
+10000 1 is compiling
+10000 3 has taken a dongle
+10000 3 has taken a dongle
+10000 3 is compiling
+10200 3 is debugging
+10200 1 is debugging
+10400 1 is refactoring
+10400 3 is refactoring
+11000 4 has taken a dongle
+11000 4 has taken a dongle
+11000 4 is compiling
+11000 2 has taken a dongle
+11000 2 has taken a dongle
+11000 2 is compiling
+11200 2 is debugging
+11200 4 is debugging
+11400 2 is refactoring
+11400 4 is refactoring
+12000 5 has taken a dongle
+12000 5 has taken a dongle
+12000 5 is compiling
+12000 3 has taken a dongle
+12000 3 has taken a dongle
+12000 3 is compiling
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48818== Memcheck, a memory error detector
+==48818== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48818== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48818== Command: ./codexion 5 3000 200 200 200 5 800 fifo
+==48818== 
+93 4 has taken a dongle
+99 4 has taken a dongle
+99 4 is compiling
+100 2 has taken a dongle
+100 2 has taken a dongle
+100 2 is compiling
+300 4 is debugging
+300 2 is debugging
+500 4 is refactoring
+500 2 is refactoring
+1101 1 has taken a dongle
+1101 1 has taken a dongle
+1101 1 is compiling
+1101 3 has taken a dongle
+1101 3 has taken a dongle
+1101 3 is compiling
+1301 1 is debugging
+1301 3 is debugging
+1501 3 is refactoring
+1501 1 is refactoring
+2101 5 has taken a dongle
+2101 5 has taken a dongle
+2101 5 is compiling
+2101 2 has taken a dongle
+2101 2 has taken a dongle
+2101 2 is compiling
+2301 2 is debugging
+2301 5 is debugging
+2501 5 is refactoring
+2501 2 is refactoring
+3094 4 burned out
+==48818== 
+==48818== HEAP SUMMARY:
+==48818==     in use at exit: 0 bytes in 0 blocks
+==48818==   total heap usage: 12 allocs, 12 frees, 6,564 bytes allocated
+==48818== 
+==48818== All heap blocks were freed -- no leaks are possible
+==48818== 
+==48818== For lists of detected and suppressed errors, rerun with: -s
+==48818== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48836== Helgrind, a thread error detector
+==48836== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48836== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48836== Command: ./codexion 5 3000 200 200 200 5 800 fifo
+==48836== 
+6 1 has taken a dongle
+9 1 has taken a dongle
+9 1 is compiling
+12 3 has taken a dongle
+12 3 has taken a dongle
+12 3 is compiling
+209 1 is debugging
+212 3 is debugging
+409 1 is refactoring
+412 3 is refactoring
+1012 4 has taken a dongle
+1012 4 has taken a dongle
+1012 4 is compiling
+1013 2 has taken a dongle
+1013 2 has taken a dongle
+1013 2 is compiling
+1212 4 is debugging
+1213 2 is debugging
+1412 4 is refactoring
+1413 2 is refactoring
+2012 5 has taken a dongle
+2012 5 has taken a dongle
+2012 5 is compiling
+2013 3 has taken a dongle
+2013 3 has taken a dongle
+2013 3 is compiling
+2212 5 is debugging
+2213 3 is debugging
+2412 5 is refactoring
+2413 3 is refactoring
+3008 1 burned out
+==48836== 
+==48836== Use --history-level=approx or =none to gain increased speed, at
+==48836== the cost of reduced accuracy of conflicting-access information
+==48836== For lists of detected and suppressed errors, rerun with: -s
+==48836== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 296977 from 90)
+
+
+
+===============================================================================
+TEST : ./codexion 5 3000 200 200 200 5 800 edf
+ATTENTE : Forte contention (800ms cooldown). Ordonnancement par deadline EDF.
+===============================================================================
+>>> EXÉCUTION STANDARD
+0 1 has taken a dongle
+0 1 has taken a dongle
+0 1 is compiling
+0 4 has taken a dongle
+0 4 has taken a dongle
+0 4 is compiling
+200 4 is debugging
+200 1 is debugging
+400 1 is refactoring
+400 4 is refactoring
+1000 2 has taken a dongle
+1000 2 has taken a dongle
+1000 2 is compiling
+1000 5 has taken a dongle
+1000 5 has taken a dongle
+1000 5 is compiling
+1200 5 is debugging
+1200 2 is debugging
+1400 5 is refactoring
+1400 2 is refactoring
+2000 1 has taken a dongle
+2000 1 has taken a dongle
+2000 1 is compiling
+2000 3 has taken a dongle
+2000 3 has taken a dongle
+2000 3 is compiling
+2200 1 is debugging
+2200 3 is debugging
+2400 3 is refactoring
+2400 1 is refactoring
+3000 4 has taken a dongle
+3000 4 has taken a dongle
+3000 4 is compiling
+3000 2 has taken a dongle
+3000 2 has taken a dongle
+3000 2 is compiling
+3200 4 is debugging
+3200 2 is debugging
+3400 2 is refactoring
+3400 4 is refactoring
+4000 3 has taken a dongle
+4000 3 has taken a dongle
+4000 3 is compiling
+4000 5 has taken a dongle
+4000 5 has taken a dongle
+4000 5 is compiling
+4200 5 is debugging
+4200 3 is debugging
+4400 3 is refactoring
+4400 5 is refactoring
+5000 1 has taken a dongle
+5000 1 has taken a dongle
+5000 1 is compiling
+5000 4 has taken a dongle
+5000 4 has taken a dongle
+5000 4 is compiling
+5200 1 is debugging
+5200 4 is debugging
+5400 1 is refactoring
+5400 4 is refactoring
+6000 5 has taken a dongle
+6000 5 has taken a dongle
+6000 5 is compiling
+6000 2 has taken a dongle
+6000 2 has taken a dongle
+6000 2 is compiling
+6200 2 is debugging
+6200 5 is debugging
+6400 5 is refactoring
+6400 2 is refactoring
+7000 3 has taken a dongle
+7000 3 has taken a dongle
+7000 3 is compiling
+7000 1 has taken a dongle
+7000 1 has taken a dongle
+7000 1 is compiling
+7200 3 is debugging
+7200 1 is debugging
+7400 1 is refactoring
+7400 3 is refactoring
+8000 4 has taken a dongle
+8000 4 has taken a dongle
+8000 4 is compiling
+8000 2 has taken a dongle
+8000 2 has taken a dongle
+8000 2 is compiling
+8200 2 is debugging
+8200 4 is debugging
+8400 4 is refactoring
+8400 2 is refactoring
+9000 3 has taken a dongle
+9000 3 has taken a dongle
+9000 3 is compiling
+9000 5 has taken a dongle
+9000 5 has taken a dongle
+9000 5 is compiling
+9200 3 is debugging
+9200 5 is debugging
+9400 3 is refactoring
+9400 5 is refactoring
+10000 4 has taken a dongle
+10000 4 has taken a dongle
+10000 4 is compiling
+10000 1 has taken a dongle
+10000 1 has taken a dongle
+10000 1 is compiling
+10200 4 is debugging
+10200 1 is debugging
+10400 4 is refactoring
+10400 1 is refactoring
+11000 2 has taken a dongle
+11000 2 has taken a dongle
+11000 2 is compiling
+11000 5 has taken a dongle
+11000 5 has taken a dongle
+11000 5 is compiling
+11200 2 is debugging
+11200 5 is debugging
+11400 5 is refactoring
+11400 2 is refactoring
+12000 3 has taken a dongle
+12000 3 has taken a dongle
+12000 3 is compiling
+12000 1 has taken a dongle
+12000 1 has taken a dongle
+12000 1 is compiling
+
+
+>>> EXÉCUTION VALGRIND (MEMORY LEAKS)
+==48909== Memcheck, a memory error detector
+==48909== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==48909== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48909== Command: ./codexion 5 3000 200 200 200 5 800 edf
+==48909== 
+94 4 has taken a dongle
+100 4 has taken a dongle
+100 4 is compiling
+101 1 has taken a dongle
+101 1 has taken a dongle
+101 1 is compiling
+301 4 is debugging
+301 1 is debugging
+501 4 is refactoring
+501 1 is refactoring
+1101 5 has taken a dongle
+1101 5 has taken a dongle
+1101 5 is compiling
+1102 2 has taken a dongle
+1102 2 has taken a dongle
+1102 2 is compiling
+1301 5 is debugging
+1302 2 is debugging
+1501 5 is refactoring
+1502 2 is refactoring
+2102 1 has taken a dongle
+2102 1 has taken a dongle
+2102 1 is compiling
+2102 3 has taken a dongle
+2102 3 has taken a dongle
+2102 3 is compiling
+2302 3 is debugging
+2302 1 is debugging
+2502 3 is refactoring
+2502 1 is refactoring
+3096 4 burned out
+==48909== 
+==48909== HEAP SUMMARY:
+==48909==     in use at exit: 0 bytes in 0 blocks
+==48909==   total heap usage: 12 allocs, 12 frees, 6,564 bytes allocated
+==48909== 
+==48909== All heap blocks were freed -- no leaks are possible
+==48909== 
+==48909== For lists of detected and suppressed errors, rerun with: -s
+==48909== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
+
+>>> EXÉCUTION HELGRIND (DATA RACES & DEADLOCKS)
+==48923== Helgrind, a thread error detector
+==48923== Copyright (C) 2007-2017, and GNU GPL'd, by OpenWorks LLP et al.
+==48923== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==48923== Command: ./codexion 5 3000 200 200 200 5 800 edf
+==48923== 
+6 1 has taken a dongle
+9 1 has taken a dongle
+9 1 is compiling
+11 3 has taken a dongle
+12 3 has taken a dongle
+12 3 is compiling
+209 1 is debugging
+212 3 is debugging
+409 1 is refactoring
+412 3 is refactoring
+1012 2 has taken a dongle
+1012 2 has taken a dongle
+1012 2 is compiling
+1013 4 has taken a dongle
+1013 4 has taken a dongle
+1013 4 is compiling
+1212 2 is debugging
+1213 4 is debugging
+1412 2 is refactoring
+1413 4 is refactoring
+2013 3 has taken a dongle
+2013 3 has taken a dongle
+2013 3 is compiling
+2013 5 has taken a dongle
+2013 5 has taken a dongle
+2013 5 is compiling
+2213 5 is debugging
+2213 3 is debugging
+2413 5 is refactoring
+2413 3 is refactoring
+3007 1 burned out
+==48923== 
+==48923== Use --history-level=approx or =none to gain increased speed, at
+==48923== the cost of reduced accuracy of conflicting-access information
+==48923== For lists of detected and suppressed errors, rerun with: -s
+==48923== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 296975 from 94)
+
+
+

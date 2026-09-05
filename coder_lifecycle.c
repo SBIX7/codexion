@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 19:54:12 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/05 11:25:45 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 14:39:48 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,13 @@
 
 void	sync_coder_request(t_data *data, t_coder *coder)
 {
-	long			wait_time;
-	struct timespec	ts;
-
-	if (strcmp(data->scheduler, "fifo") == 0)
-		coder->request_order = data->request_count++;
+	coder->request_order = data->request_count++;
 	push_heap(data, coder);
 	while (data->simulation_running && !can_take_dongles(data, coder))
 	{
-		wait_time = get_cooldown_remaining(data, coder);
-		if (wait_time > 0)
-			set_timewait(&ts, wait_time);
-		else
-			set_timewait(&ts, 5);
-		pthread_cond_timedwait(&coder->cond, &data->simulation_mutex, &ts);
+		pthread_mutex_unlock(&data->simulation_mutex);
+		usleep(500);
+		pthread_mutex_lock(&data->simulation_mutex);
 	}
 }
 
@@ -76,7 +69,6 @@ void	coder_release(t_data *data, t_coder *coder)
 	int		first;
 	int		second;
 	long	ready;
-	int		i;
 
 	idx1 = coder->coder_id - 1;
 	idx2 = coder->coder_id % data->num_coders;
@@ -87,12 +79,6 @@ void	coder_release(t_data *data, t_coder *coder)
 	ready = get_current_time() + data->dongle_cooldown;
 	data->dongles_status[idx1] = ready;
 	data->dongles_status[idx2] = ready;
-	i = 0;
-	while (i < data->queue_size)
-	{
-		pthread_cond_signal(&data->coders[data->queue[i] - 1].cond);
-		i++;
-	}
 	pthread_mutex_unlock(&data->simulation_mutex);
 }
 

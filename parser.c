@@ -35,25 +35,27 @@ int	is_valid_argument(char *arg, int schedular)
 t_data	*parser(char **args)
 {
 	t_data	*data;
+	int		i;
 
+	i = 1;
+	while (i <= 7)
+	{
+		if (!is_valid_argument(args[i], 0))
+			return (NULL);
+		i++;
+	}
+	if (!is_valid_argument(args[8], 1))
+		return (NULL);
 	data = malloc(sizeof(t_data));
 	if (data == NULL)
 		return (NULL);
-	if (is_valid_argument(args[1], 0))
-		data->num_coders = atoi(args[1]);
-	if (is_valid_argument(args[2], 0))
-		data->time_burnout = atoi(args[2]);
-	if (is_valid_argument(args[3], 0))
-		data->time_compile = atoi(args[3]);
-	if (is_valid_argument(args[4], 0))
-		data->time_debug = atoi(args[4]);
-	if (is_valid_argument(args[5], 0))
-		data->time_refactor = atoi(args[5]);
-	if (is_valid_argument(args[6], 0))
-		data->num_compiles = atoi(args[6]);
-	if (is_valid_argument(args[7], 0))
-		data->dongle_cooldown = atoi(args[7]);
-	if (is_valid_argument(args[8], 1))
-		data->scheduler = args[8];
+	data->num_coders = atoi(args[1]);
+	data->time_burnout = atoi(args[2]);
+	data->time_compile = atoi(args[3]);
+	data->time_debug = atoi(args[4]);
+	data->time_refactor = atoi(args[5]);
+	data->num_compiles = atoi(args[6]);
+	data->dongle_cooldown = atoi(args[7]);
+	data->scheduler = args[8];
 	return (data);
 }
