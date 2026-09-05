@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/29 10:09:59 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 12:03:23 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 11:01:37 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ t_coder	*init_coders(t_data *data)
 		coders[i].compile_count = 0;
 		coders[i].last_compile_time = 0;
 		coders[i].data = data;
-		if (pthread_cond_init(&coders[i].cond, NULL) != 0)
+		if (pthread_cond_init(&coders[i].cond, NULL) != 0
+			|| pthread_mutex_init(&coders[i].state_mutex, NULL) != 0)
 			return (NULL);
 		i++;
 	}
@@ -63,7 +64,6 @@ int	init_mutexs(t_data *data)
 		i++;
 	}
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0
-		|| pthread_mutex_init(&data->queue_mutex, NULL) != 0
 		|| pthread_mutex_init(&data->simulation_mutex, NULL) != 0)
 		return (1);
 	return (0);

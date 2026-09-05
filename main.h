@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/28 09:51:30 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 22:34:23 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 11:01:34 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ typedef struct s_data
 	int				request_count;
 	long			start_time;
 	pthread_mutex_t	print_mutex;
-	pthread_mutex_t	queue_mutex;
 	pthread_mutex_t	simulation_mutex;
 }					t_data;
 
@@ -77,4 +76,8 @@ int					is_priority(t_data *data, int id_1, int id_2);
 void				extract_from_heap(t_data *data, int coder_id);
 int					can_take_dongles(t_data *data, t_coder *coder);
 void				precise_usleep(long time_in_ms, t_data *data);
+void				print_status(t_data *data, int id, char *status);
+void				clean_exit(t_data *data);
+void				order_dongles(int idx1, int idx2, int *first, int *second);
+int					get_sim_status(t_data *data);
 #endif

@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/01 14:40:34 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 12:03:17 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 11:01:36 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	is_valid_argument(char *arg, int schedular)
 
 t_data	*parser(char **args)
 {
-	int		i;
 	t_data	*data;
 
 	data = malloc(sizeof(t_data));

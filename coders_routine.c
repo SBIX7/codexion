@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 13:36:00 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 22:10:00 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 11:01:38 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	*routine(void *arg)
 
 	c_arg = (t_coder *)arg;
 	sim_data = c_arg->data;
-	while (sim_data->simulation_running)
+	while (get_sim_status(sim_data))
 	{
 		if (coder_wait_for_turn(sim_data, c_arg) == NULL)
 			return (NULL);

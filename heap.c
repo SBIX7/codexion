@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/02 15:02:45 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 22:15:43 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 11:01:35 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	shift_down(t_data *data, int i)
 			break ;
 	}
 }
+
 int	is_priority(t_data *data, int id_1, int id_2)
 {
 	t_coder	*coder1;

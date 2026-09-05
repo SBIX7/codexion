@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/27 09:51:59 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 11:55:18 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 11:01:36 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int	main(int argc, char **argv)
 	coders = init_coders(data);
 	setup_env(data, coders);
 	start_simulation(data);
+	clean_exit(data);
 	return (0);
 }

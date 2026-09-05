@@ -6,7 +6,7 @@
 /*   By: msbii <msbii@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/03 19:54:12 by msbii             #+#    #+#             */
-/*   Updated: 2026/09/04 22:41:55 by msbii            ###   ########.fr       */
+/*   Updated: 2026/09/05 11:25:45 by msbii            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,10 @@ void	sync_coder_request(t_data *data, t_coder *coder)
 	{
 		wait_time = get_cooldown_remaining(data, coder);
 		if (wait_time > 0)
-		{
 			set_timewait(&ts, wait_time);
-			pthread_cond_timedwait(&coder->cond, &data->simulation_mutex, &ts);
-		}
 		else
-		{
 			set_timewait(&ts, 5);
-			pthread_cond_timedwait(&coder->cond, &data->simulation_mutex, &ts);
-		}
+		pthread_cond_timedwait(&coder->cond, &data->simulation_mutex, &ts);
 	}
 }
 
@@ -56,23 +51,21 @@ void	coder_compile(t_data *data, t_coder *coder)
 {
 	int	idx1;
 	int	idx2;
+	int	first;
+	int	second;
 
 	idx1 = coder->coder_id - 1;
 	idx2 = coder->coder_id % data->num_coders;
-	pthread_mutex_lock(&data->dongles[idx1]);
-	pthread_mutex_lock(&data->dongles[idx2]);
+	order_dongles(idx1, idx2, &first, &second);
+	pthread_mutex_lock(&data->dongles[first]);
+	pthread_mutex_lock(&data->dongles[second]);
 	pthread_mutex_lock(&coder->state_mutex);
 	data->coders[idx1].last_compile_time = get_current_time();
 	coder->compile_count++;
 	pthread_mutex_unlock(&coder->state_mutex);
-	pthread_mutex_lock(&data->print_mutex);
-	printf("%ld %d has taken a dongle\n", get_current_time() - data->start_time,
-		idx1 + 1);
-	printf("%ld %d has taken a dongle\n", get_current_time() - data->start_time,
-		idx1 + 1);
-	printf("%ld %d is compiling\n", get_current_time() - data->start_time, idx1
-		+ 1);
-	pthread_mutex_unlock(&data->print_mutex);
+	print_status(data, idx1 + 1, "has taken a dongle");
+	print_status(data, idx1 + 1, "has taken a dongle");
+	print_status(data, idx1 + 1, "is compiling");
 	precise_usleep(data->time_compile, data);
 }
 
@@ -80,13 +73,16 @@ void	coder_release(t_data *data, t_coder *coder)
 {
 	int		idx1;
 	int		idx2;
+	int		first;
+	int		second;
 	long	ready;
 	int		i;
 
 	idx1 = coder->coder_id - 1;
 	idx2 = coder->coder_id % data->num_coders;
-	pthread_mutex_unlock(&data->dongles[idx1]);
-	pthread_mutex_unlock(&data->dongles[idx2]);
+	order_dongles(idx1, idx2, &first, &second);
+	pthread_mutex_unlock(&data->dongles[second]);
+	pthread_mutex_unlock(&data->dongles[first]);
 	pthread_mutex_lock(&data->simulation_mutex);
 	ready = get_current_time() + data->dongle_cooldown;
 	data->dongles_status[idx1] = ready;
@@ -105,13 +101,8 @@ void	coder_rest(t_data *data, t_coder *coder)
 	int	id;
 
 	id = coder->coder_id;
-	pthread_mutex_lock(&data->print_mutex);
-	printf("%ld %d is debugging\n", get_current_time() - data->start_time, id);
-	pthread_mutex_unlock(&data->print_mutex);
+	print_status(data, id, "is debugging");
 	precise_usleep(data->time_debug, data);
-	pthread_mutex_lock(&data->print_mutex);
-	printf("%ld %d is refactoring\n", get_current_time() - data->start_time,
-		id);
-	pthread_mutex_unlock(&data->print_mutex);
+	print_status(data, id, "is refactoring");
 	precise_usleep(data->time_refactor, data);
 }
